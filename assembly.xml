@@ -1,0 +1,29 @@
+<assembly>
+    <id>sto-aso</id>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <formats>
+        <format>dir</format>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/data</directory>
+            <outputDirectory>./</outputDirectory>
+            <includes>
+                <include>assignments.csv</include>
+                <include>events.csv</include>
+                <include>renamed.csv</include>
+                <include>ships.csv</include>
+                <include>traits.csv</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>./</outputDirectory>
+            <includes>
+                <include>sto-aso.jar</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>
