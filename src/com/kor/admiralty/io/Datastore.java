@@ -22,6 +22,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.SortedMap;
@@ -148,12 +151,18 @@ public class Datastore {
 
 	private static void loadShipDatabase() {
 		File file = file(FILENAME_SHIPCACHE);
+		File userShips = file(FILENAME_SHIPCACHE_USER);
 
 		SHIPS.clear();
 		try (Reader reader = loadFile(file)) {
 			ShipDatabaseParser.loadShipDatabase(reader, SHIPS);
 		} catch (IOException cause) {
 			logger.log(Level.WARNING, String.format(ErrorReading, file.getName()), cause);
+		}
+		try (Reader reader = loadFile(userShips)) {
+			ShipDatabaseParser.loadShipDatabase(reader, SHIPS);
+		} catch (IOException cause) {
+			logger.log(Level.WARNING, String.format(ErrorReading, userShips.getName()), cause);
 		}
 	}
 	
@@ -215,6 +224,18 @@ public class Datastore {
 					ICONS.put(entry.getName(), ImageIO.read(is));
 				}
 			}
+			Files.walk(Paths.get(DIRECTORY_ICONS_USER))
+					.filter(p -> p.toString().toLowerCase().endsWith(".png"))
+					.map(Path::toFile)
+					.forEach(Datastore::addIcon);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void addIcon(File file) {
+		try {
+			ICONS.put(file.getName(), ImageIO.read(file));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

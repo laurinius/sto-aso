@@ -6,7 +6,7 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>${project.basedir}/icons/</directory>
+            <directory>${project.basedir}/resources/icons/</directory>
             <outputDirectory>./</outputDirectory>
         </fileSet>
     </fileSets>

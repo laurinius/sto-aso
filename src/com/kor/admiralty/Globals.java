@@ -31,15 +31,16 @@ public class Globals {
 	public static final StyleSheet STYLESHEET_TRAIT = customStyleSheet(CSS_TRAIT);
 	public static final int MAX_ASSIGNMENTS = 3;
 	public static final int SOLVER_DEPTH = 10;
-	public static final String URL_UPDATE = "https://github.com/intrinsical/sto-aso/raw/master/%s";
 	public static final long UPDATE_INTERVAL = 7L * 24L * 60L * 60L * 1000L; // Check for updates every 7 days
 	public static final String FILENAME_ADMIRALS = "admirals.xml";
 	public static final String FILENAME_SHIPCACHE = "data/ships.csv";
+	public static final String FILENAME_SHIPCACHE_USER = "ships.csv";
 	public static final String FILENAME_EVENTS = "data/events.csv";
 	public static final String FILENAME_ASSIGNMENTS = "data/assignments.csv";
 	public static final String FILENAME_RENAMED = "data/renamed.csv";
 	public static final String FILENAME_TRAITS = "data/traits.csv";
 	public static final String FILENAME_ICONS = "data/icons.zip";
+	public static final String DIRECTORY_ICONS_USER = "icons";
 	public static final String FILENAME_ICONCACHE = "iconcache.zip";
 	public static final String FILENAME_NEWCACHE = "newiconcache.zip";
 	public static final String DATA_FILES[] = { FILENAME_SHIPCACHE, FILENAME_EVENTS, FILENAME_ASSIGNMENTS,

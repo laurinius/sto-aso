@@ -1,0 +1,3 @@
+- Use aso.properties to control data update
+- Add new/custom ships to ships.csv in this/root directory
+- Add new/custom ship icon PNGs to icon directory

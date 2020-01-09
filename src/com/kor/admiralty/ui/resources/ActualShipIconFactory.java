@@ -56,23 +56,12 @@ public class ActualShipIconFactory extends GenericShipIconFactory {
 		ImageIcon icon;
 		if (shipIcon != null) {
 			icon = buildIcon(shipIcon, faction, role, rarity);
+			cache.put(iconName, icon);
+			Datastore.setIconCacheChanged(true);
 		} else {
 			icon = super.getIcon(iconName, faction, role, rarity, owned);
 		}
-
-		cache.put(iconName, icon);
-		Datastore.setIconCacheChanged(true);
 		return icon;
-
-//		Image shipIcon = getSmoothScaledImage(iconName);
-//		ImageIcon imageIcon = buildIcon(shipIcon, faction, role, rarity);
-//		cache.put(iconName, imageIcon);
-//		Datastore.setIconCacheChanged(true);
-//		return imageIcon;
-	}
-	
-	public static boolean hasBundledIcon(String iconName) {
-		return ActualShipIconFactory.class.getResource(iconName) != null;
 	}
 
 	public static ImageIcon buildIcon(Image shipIcon, ShipFaction faction, Role role, Rarity rarity) {
