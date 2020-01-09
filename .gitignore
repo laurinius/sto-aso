@@ -1,5 +1,6 @@
 /*.iml
 /.idea/
 /target/
-/data/admirals.xml
-/data/icons.zip
+/admirals.xml
+/aso.properties
+/iconcache.zip

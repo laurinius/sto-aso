@@ -132,7 +132,7 @@ Federation,6,Heavy Battlecruiser [T6],Rare,Eng,58,26,24,+8 ENG and SCI per TacSh
 Federation,6,Intel Assault Cruiser (T6),Rare,Eng,62,30,16,+20 TAC and ENG when Alone,Specialist Knowledge
 Federation,6,Mirror Guardian Cruiser (T6),Rare,Eng,64,23,21,2.5x Critical Rating from SCI,Desperate Repairs
 Federation,6,Support Cruiser [T6],Rare,Eng,62,21,25,-25% Maintenance per EngShip,History Will Remember
-Federation,6,Tellarite Pralim Flight-Deck Assault Cruiser (T6),Rare,Eng,53,38,17,+10 ENG per TacShip,Majority – Minority
+Federation,6,Tellarite Pralim Flight-Deck Assault Cruiser (T6),Rare,Eng,53,38,17,+10 ENG per TacShip,Majority ï¿½ Minority
 Federation,6,Temporal Battlecruiser (T6),Rare,Eng,47,44,17,2x Critical Rating from Events,Retaliation
 Federation,6,Temporal Cruiser (T6),Rare,Eng,56,26,26,+10 ENG per SciShip,Shield Overload
 Federation,6,Advanced Research Vessel (T6),Rare,Sci,31,20,57,+8 SCI per EngShip or TacShip,Tachyon Dispersal
@@ -295,7 +295,7 @@ Klingon,5,Fleet Scourge Destroyer Retrofit,Very Rare,Tac,21,50,27,1.5x Critical 
 Klingon,5,Fleet Somraw Raptor Retrofit,Very Rare,Tac,32,44,22,+10 SCI per SciShip,
 Klingon,6,Kurak Battlecruiser (T6),Rare,Eng,50,37,21,-25% Maintenance per TacShip,Emergency Weapon Cycle
 Klingon,6,Negh'Tev Heavy Battle Cruiser (T6),Rare,Eng,51,32,25,+8 SCI and TAC per TacShip,Explosive Polarity Shift
-Klingon,6,Orion Blackguard Flight-Deck Assault Cruiser (T6),Rare,Eng,53,38,17,+10 ENG per TacShip,Majority – Minority
+Klingon,6,Orion Blackguard Flight-Deck Assault Cruiser (T6),Rare,Eng,53,38,17,+10 ENG per TacShip,Majority ï¿½ Minority
 Klingon,6,QeHpu' Advanced Light Battlecruiser (T6),Rare,Eng,55,31,22,2.5x Critical Rating from ENG,Evasion Specialist
 Klingon,6,Qib Intel Battle Cruiser (T6),Rare,Eng,54,37,17,+10 SCI per EngShip,Advanced Firing Solutions
 Klingon,6,Support Battlecruiser [T6],Rare,Eng,62,27,19,-25% Maintenance per EngShip,History Will Remember
@@ -396,7 +396,7 @@ Romulan,6,Aelahl Light Warbird Battlecruiser (T6),Rare,Eng,53,36,19,+15 All Stat
 Romulan,6,D'Khellra Warbird Battlecruiser (T6),Rare,Eng,52,28,28,+8 SCI and TAC per TacShip,Explosive Polarity Shift
 Romulan,6,Deleth Advanced Light Warbird Battlecruiser (T6),Rare,Eng,47,36,25,2.5x Critical Rating from ENG,Evasion Specialist
 Romulan,6,Kara Advanced Warbird (T6),Rare,Eng,58,28,22,+15 All Stats when Alone,Subsystem Redundancies
-Romulan,6,Suliban Silik Flight-Deck Assault Cruiser (T6),Rare,Eng,53,38,17,+10 ENG per TacShip,Majority – Minority
+Romulan,6,Suliban Silik Flight-Deck Assault Cruiser (T6),Rare,Eng,53,38,17,+10 ENG per TacShip,Majority ï¿½ Minority
 Romulan,6,Laeosa Research Vessel (T6),Rare,Sci,37,22,55,+8 SCI per EngShip or TacShip,Tachyon Dispersal
 Romulan,6,Dinaes Warbird Destroyer (T6),Rare,Tac,31,52,25,-25% Maintenance per SciShip,Weapon System Synergy
 Romulan,6,Faeht Intel Warbird (T6),Rare,Tac,19,62,27,+10 ENG per TacShip,Tactical Retreat

@@ -8,13 +8,14 @@
     <fileSets>
         <fileSet>
             <directory>${project.basedir}/data</directory>
-            <outputDirectory>./</outputDirectory>
+            <outputDirectory>./data</outputDirectory>
             <includes>
                 <include>assignments.csv</include>
                 <include>events.csv</include>
                 <include>renamed.csv</include>
                 <include>ships.csv</include>
                 <include>traits.csv</include>
+                <include>icons.zip</include>
             </includes>
         </fileSet>
 

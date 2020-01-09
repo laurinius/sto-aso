@@ -34,14 +34,16 @@ public class Globals {
 	public static final String URL_UPDATE = "https://github.com/intrinsical/sto-aso/raw/master/%s";
 	public static final long UPDATE_INTERVAL = 7L * 24L * 60L * 60L * 1000L; // Check for updates every 7 days
 	public static final String FILENAME_ADMIRALS = "admirals.xml";
-	public static final String FILENAME_SHIPCACHE = "ships.csv";
-	public static final String FILENAME_EVENTS = "events.csv";
-	public static final String FILENAME_ASSIGNMENTS = "assignments.csv";
-	public static final String FILENAME_RENAMED = "renamed.csv";
-	public static final String FILENAME_TRAITS = "traits.csv";
-	public static final String FILENAME_ICONCACHE = "icons.zip";
-	public static final String FILENAME_NEWCACHE = "newicons.zip";
-	public static final String FILENAME_HASHES = "hashes.md5";
+	public static final String FILENAME_SHIPCACHE = "data/ships.csv";
+	public static final String FILENAME_EVENTS = "data/events.csv";
+	public static final String FILENAME_ASSIGNMENTS = "data/assignments.csv";
+	public static final String FILENAME_RENAMED = "data/renamed.csv";
+	public static final String FILENAME_TRAITS = "data/traits.csv";
+	public static final String FILENAME_ICONS = "data/icons.zip";
+	public static final String FILENAME_ICONCACHE = "iconcache.zip";
+	public static final String FILENAME_NEWCACHE = "newiconcache.zip";
+	public static final String DATA_FILES[] = { FILENAME_SHIPCACHE, FILENAME_EVENTS, FILENAME_ASSIGNMENTS,
+												FILENAME_RENAMED, FILENAME_TRAITS, FILENAME_ICONS};
 	public static boolean DEBUG;
 
 	static {

@@ -16,26 +16,25 @@
  *******************************************************************************/
 package com.kor.admiralty.io;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.io.Writer;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import com.kor.admiralty.Configuration;
 import com.kor.admiralty.Globals;
 import com.kor.admiralty.beans.AdmAssignment;
 import com.kor.admiralty.beans.Admiral;
@@ -44,14 +43,7 @@ import com.kor.admiralty.beans.Event;
 import com.kor.admiralty.beans.Ship;
 import com.kor.admiralty.ui.workers.SwingWorkerExecutor;
 
-import static com.kor.admiralty.Globals.FILENAME_ADMIRALS;
-import static com.kor.admiralty.Globals.FILENAME_ASSIGNMENTS;
-import static com.kor.admiralty.Globals.FILENAME_EVENTS;
-import static com.kor.admiralty.Globals.FILENAME_ICONCACHE;
-import static com.kor.admiralty.Globals.FILENAME_NEWCACHE;
-import static com.kor.admiralty.Globals.FILENAME_RENAMED;
-import static com.kor.admiralty.Globals.FILENAME_SHIPCACHE;
-import static com.kor.admiralty.Globals.FILENAME_TRAITS;
+import static com.kor.admiralty.Globals.*;
 import static com.kor.admiralty.ui.resources.Strings.ExceptionDialog.*;
 
 public class Datastore {
@@ -63,9 +55,10 @@ public class Datastore {
 	private static SortedMap<String, AdmAssignment> ASSIGNMENTS = new TreeMap<String, AdmAssignment>();
 	private static SortedMap<String, String> RENAMED = new TreeMap<String, String>();
 	private static SortedMap<String, String> TRAITS = new TreeMap<String, String>();
-	private static SortedMap<String, ImageIcon> ICONS = new TreeMap<String, ImageIcon>();
+	private static SortedMap<String, ImageIcon> ICONCACHE = new TreeMap<String, ImageIcon>();
+	private static SortedMap<String, BufferedImage> ICONS = new TreeMap<>();
 	private static Admirals ADMIRALS = null;
-	private static boolean ICONS_CHANGED = false;
+	private static boolean ICONCACHE_CHANGED = false;
 
 	private static transient JAXBContext admiralsContext;
 	private static transient Marshaller admiralsMarshaller;
@@ -116,52 +109,42 @@ public class Datastore {
 	}
 	
 	public static SortedMap<String, ImageIcon> getCachedIcons() {
-		if (ICONS.isEmpty()) {
+		if (ICONCACHE.isEmpty()) {
 			loadCachedIcons();
+		}
+		return ICONCACHE;
+	}
+
+	public static SortedMap<String, BufferedImage> getIcons() {
+		if (ICONS.isEmpty()) {
+			loadIcons();
 		}
 		return ICONS;
 	}
 	
 	public static boolean isDataFilesStale() {
-		File file = file(Globals.FILENAME_HASHES);
-		return file.exists() ? isStale(file) : true;
+		for (String filename : Globals.DATA_FILES) {
+			if (!file(filename).exists()) {
+				return true;
+			}
+		}
+		long now = System.currentTimeMillis();
+		long lastUpdated = Configuration.getDataUpdateLastUpdated();
+		return now > (lastUpdated + (86_400_000L * Configuration.getDataUpdateInterval()));
 	}
 
-	public static boolean isIconCacheStale() {
-		File file = file(FILENAME_ICONCACHE);
-		if (!file.exists()) return true;
-		
-		if (isStale(file)) {
-			file.setLastModified(System.currentTimeMillis());
-			return true;
-		}
-		return false;
-	}
-	
 	public static void setIconCacheChanged(boolean change) {
-		ICONS_CHANGED = change;
+		ICONCACHE_CHANGED = change;
 	}
-	
+
 	public static void preserveIconCache() {
-		if (ICONS_CHANGED) {
+		if (ICONCACHE_CHANGED) {
 			saveCachedIcons();
 		}
 	}
-	
+
 	private static void loadShipDatabase() {
 		File file = file(FILENAME_SHIPCACHE);
-		
-		/*/ Unused code, currently does nothing.
-		if (!file.exists()) {
-			//updateShipDatabase(file);
-		}
-
-		long refreshTime = getCacheTime();
-		long lastModified = file.lastModified();
-		if (refreshTime < lastModified) {
-			//updateShipDatabase(file);
-		}
-		/*/
 
 		SHIPS.clear();
 		try (Reader reader = loadFile(file)) {
@@ -169,15 +152,6 @@ public class Datastore {
 		} catch (IOException cause) {
 			logger.log(Level.WARNING, String.format(ErrorReading, file.getName()), cause);
 		}
-		
-		/*/ Code needs further refinement. 
-		// Need to consider the implication of silently downloading the same file every week.
-		// Is there a better way? Check against some sort of hash before downloading?
-		if (isStale(file)) {
-			// Update ships.csv for the next time
-			SwingWorkerExecutor.downloadShipList(file);
-		}
-		/*/
 	}
 	
 	private static void loadEvents() {
@@ -222,22 +196,39 @@ public class Datastore {
 	
 	private static void loadCachedIcons() {
 		File file = file(FILENAME_ICONCACHE);
-		ICONS.clear();
-		IconLoader.loadCachedIcons(file, ICONS);
+		ICONCACHE.clear();
+		IconLoader.loadCachedIcons(file, ICONCACHE);
 	}
-	
+
+	private static void loadIcons() {
+		File file = file(FILENAME_ICONS);
+		ICONS.clear();
+		try {
+			ZipFile zipFile = new ZipFile(file);
+			Enumeration<? extends ZipEntry> entries = zipFile.entries();
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+				try (InputStream is = zipFile.getInputStream(entry)) {
+					ICONS.put(entry.getName(), ImageIO.read(is));
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private static void saveCachedIcons() {
 		File oldFile = file(FILENAME_ICONCACHE);
 		if (oldFile.exists()) {
 			oldFile.delete();
 		}
-		
+
 		File newFile = file(FILENAME_NEWCACHE);
-		IconLoader.saveCachedIcons(newFile, ICONS);
-		
+		IconLoader.saveCachedIcons(newFile, ICONCACHE);
+
 		newFile.renameTo(oldFile);
 	}
-	
+
 	/*/
 	private static long getCacheTime() {
 		return System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000);
@@ -255,17 +246,9 @@ public class Datastore {
 				admiral.validateShips();
 				admiral.activateShips();
 			}
-			if (isDataFilesStale()) {
+			if (Configuration.isDataUpdateEnabled() && isDataFilesStale()) {
 				SwingWorkerExecutor.updateDataFiles();
-			}
-			if (isIconCacheStale()) {
-				// Download icons for ships owned by the user
-				// As there can potentially be hundreds of icons to download,
-				// the update is done in the background. 
-				// As a result, the UI may not always be up to date for the current run.
-				for (Ship ship : getAllShips().values()) {
-					if (ship.isOwned()) SwingWorkerExecutor.downloadIcon(ship); 
-				}
+				Configuration.setDataUpdateLastUpdated(System.currentTimeMillis());
 			}
 		}
 		return ADMIRALS;
@@ -364,14 +347,6 @@ public class Datastore {
 		return null;
 	}
 
-	public static boolean isFresh(File file) {
-		return Globals.isTimestampFresh(file.lastModified());
-	}
-	
-	public static boolean isStale(File file) {
-		return Globals.isTimestampStale(file.lastModified());
-	}
-	
 	public static void copy(Reader input, Writer output) throws IOException {
 		char[] buffer = new char[1024];
 		int n = 0;

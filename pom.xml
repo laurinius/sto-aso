@@ -28,22 +28,6 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.2.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.kor.admiralty.ui.AdmiraltyConsole</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <descriptors>
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                    <finalName>sto-aso</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <outputDirectory>target</outputDirectory>
-                </configuration>
                 <executions>
                     <execution>
                         <id>jar-with-dependencies</id>
@@ -66,12 +50,28 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>dist</id>
+                        <id>resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>../data/icons</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>assembly-icons.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>sto-aso</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <finalName>sto-aso</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>assembly.xml</descriptor>
                             </descriptors>

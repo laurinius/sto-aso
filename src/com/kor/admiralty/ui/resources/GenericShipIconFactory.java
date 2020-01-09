@@ -21,6 +21,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.EnumMap;
 
 import javax.imageio.ImageIO;
@@ -29,6 +30,7 @@ import javax.swing.ImageIcon;
 import com.kor.admiralty.enums.Rarity;
 import com.kor.admiralty.enums.Role;
 import com.kor.admiralty.enums.ShipFaction;
+import com.kor.admiralty.io.Datastore;
 
 public class GenericShipIconFactory implements ShipIconFactory {
 	
@@ -60,7 +62,7 @@ public class GenericShipIconFactory implements ShipIconFactory {
 	protected static final Image IMG_EPIC_ENG = getImage("eng.png");
 	protected static final Image IMG_EPIC_TAC = getImage("tac.png");
 	protected static final Image IMG_EPIC_SCI = getImage("sci.png");
-	protected static final Image IMG_EPIC_SMC = getImage("tac.png");
+//	protected static final Image IMG_EPIC_SMC = getImage("tac.png");
 	//protected static final Image IMG_COMMON = getImage("common.png");
 	//protected static final Image IMG_UNCOMMON = getImage("uncommon.png");
 	//protected static final Image IMG_RARE = getImage("rare.png");
@@ -218,25 +220,7 @@ public class GenericShipIconFactory implements ShipIconFactory {
 	}
 	
 	protected static BufferedImage getImage(String name) {
-		BufferedImage image = Images.IMG_BLANK;
-		
-		try {
-			URL url = GenericShipIconFactory.class.getResource(name);
-			if (url != null) {
-				image = ImageIO.read(url);
-			}
-			else {
-				url = new URL(String.format(URL_WEBICONS, name));
-				long start = System.nanoTime();
-				image = ImageIO.read(url);
-				long end = System.nanoTime();
-				System.out.println((end - start) + "ns");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return image;
+		return Datastore.getIcons().get(name);
 	}
 	
 }

@@ -78,7 +78,7 @@ public class Images {
 	//}
 	
 	public static ImageIcon getIcon(String iconName, ShipFaction faction, Role role, Rarity rarity, boolean owned) {
-		return owned ? SHIP_ICON_FACTORY.getIcon(iconName, faction, role, rarity, owned) : SHIP_GENERIC_ICON_FACTORY.getIcon(iconName, faction, role, rarity, owned);
+		return SHIP_ICON_FACTORY.getIcon(iconName, faction, role, rarity, owned);
 	}
 	
 }

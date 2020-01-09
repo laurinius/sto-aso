@@ -56,42 +56,6 @@ public class SwingWorkerExecutor {
 		getInstance().execute(worker);
 	}
 	
-	/*/
-	public static void downloadHashes() {
-		exec(new PropertiesDownloader(URL_HASHES));
-	}
-	//*/
-	
-	/*/
-	public static void downloadShips(File file) {
-		exec(new FileDownloader(file, URL_SHIPS));
-	}
-	//*/
-	
-	/*/
-	public static void downloadTraits(File file) {
-		exec(new FileDownloader(file, URL_TRAITS));
-	}
-	//*/
-	
-	/*/
-	public static void downloadAssignments(File file) {
-		exec(new FileDownloader(file, URL_ASSIGNMENTS));
-	}
-	//*/
-	
-	/*/
-	public static void downloadEvents(File file) {
-		exec(new FileDownloader(file, URL_EVENTS));
-	}
-	//*/
-	
-	/*/
-	public static void downloadRenamedShips(File file) {
-		exec(new FileDownloader(file, URL_RENAMED));
-	}
-	//*/
-	
 	public static void downloadFile(File file, String filename) {
 		exec(new FileDownloader(file, filename));
 	}
@@ -103,7 +67,7 @@ public class SwingWorkerExecutor {
 		if (Datastore.getCachedIcons().containsKey(iconName)) return;
 		exec(new ShipIconLoader(ship.getName().toLowerCase(), iconName));
 	}
-	
+
 	public static void updateDataFiles() {
 		exec(new UpdateDataFiles());
 	}

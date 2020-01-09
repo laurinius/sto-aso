@@ -52,17 +52,23 @@ public class ActualShipIconFactory extends GenericShipIconFactory {
 		if (cache.containsKey(iconName)) {
 			return cache.get(iconName);
 		}
-		
-		if (!hasBundledIcon(iconName)) {
-			// Ship icon is not found in the .jar file, fallback to using generic ship icon 
-			return super.getIcon(iconName, faction, role, rarity, owned);
-		}
-		
 		Image shipIcon = getSmoothScaledImage(iconName);
-		ImageIcon imageIcon = buildIcon(shipIcon, faction, role, rarity); 
-		cache.put(iconName, imageIcon);
+		ImageIcon icon;
+		if (shipIcon != null) {
+			icon = buildIcon(shipIcon, faction, role, rarity);
+		} else {
+			icon = super.getIcon(iconName, faction, role, rarity, owned);
+		}
+
+		cache.put(iconName, icon);
 		Datastore.setIconCacheChanged(true);
-		return imageIcon;
+		return icon;
+
+//		Image shipIcon = getSmoothScaledImage(iconName);
+//		ImageIcon imageIcon = buildIcon(shipIcon, faction, role, rarity);
+//		cache.put(iconName, imageIcon);
+//		Datastore.setIconCacheChanged(true);
+//		return imageIcon;
 	}
 	
 	public static boolean hasBundledIcon(String iconName) {
@@ -151,6 +157,9 @@ public class ActualShipIconFactory extends GenericShipIconFactory {
 	
 	protected static Image getSmoothScaledImage(String name) {
 		BufferedImage image = getImage(name);
+		if (image == null) {
+			return null;
+		}
 		return image.getScaledInstance(SPAN_IMAGE, SPAN_IMAGE, Image.SCALE_SMOOTH);
 	}
 }
