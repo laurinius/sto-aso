@@ -18,6 +18,10 @@ package com.kor.admiralty.io;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.SortedMap;
@@ -41,7 +45,6 @@ import com.kor.admiralty.beans.Admiral;
 import com.kor.admiralty.beans.Admirals;
 import com.kor.admiralty.beans.Event;
 import com.kor.admiralty.beans.Ship;
-import com.kor.admiralty.ui.workers.SwingWorkerExecutor;
 
 import static com.kor.admiralty.Globals.*;
 import static com.kor.admiralty.ui.resources.Strings.ExceptionDialog.*;
@@ -246,12 +249,40 @@ public class Datastore {
 				admiral.validateShips();
 				admiral.activateShips();
 			}
-			if (Configuration.isDataUpdateEnabled() && isDataFilesStale()) {
-				SwingWorkerExecutor.updateDataFiles();
-				Configuration.setDataUpdateLastUpdated(System.currentTimeMillis());
-			}
 		}
 		return ADMIRALS;
+	}
+
+	public static void updateDataFiles() {
+		if (Configuration.isDataUpdateEnabled() && isDataFilesStale()) {
+			for(String filename : DATA_FILES) {
+				File file = Datastore.file(filename);
+				String url = url(filename);
+				downloadFile(file, url);
+			}
+			Configuration.setDataUpdateLastUpdated(System.currentTimeMillis());
+		}
+	}
+
+	private static String url(String filename) {
+		return String.format(Configuration.getDataUpdateUrl(), filename);
+	}
+
+	private static void downloadFile(File file, String remoteName) {
+		File tempFile = new File(file.toString() + ".temp");
+		try {
+			URL url = new URL(remoteName);
+			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
+			FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
+			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+			fileOutputStream.close();
+			file.delete();
+			tempFile.renameTo(file);
+		} catch (MalformedURLException cause) {
+			logger.log(Level.WARNING, "Malformed URL: " + remoteName, cause);
+		} catch (IOException cause) {
+			logger.log(Level.WARNING, "Error while downloading " + remoteName, cause);
+		}
 	}
 	
 	public static void setAdmirals(Admirals admirals) {

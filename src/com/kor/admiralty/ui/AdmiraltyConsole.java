@@ -58,6 +58,7 @@ import javax.swing.JTabbedPane;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.concurrent.ConcurrentNavigableMap;
 import javax.swing.JToggleButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
@@ -74,24 +75,10 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 	protected SortedMap<String, Ship> ships;
 
 	protected JPanel contentPane;
-	protected final Action actionAddAdmiral = new AddAdmiralAction();
-	private final Action actionDeleteAdmiral = new DeleteAdmiralAction();
+	protected Action actionAddAdmiral;
 	private JTabbedPane tabAdmirals;
-	private JButton btnDeleteAdmiral;
-	private JToggleButton tglbtnLeft;
-	private JToggleButton tglbtnCenter;
-	private JToggleButton tglbtnRight;
 	private JToggleButton tglbtnStayOnTop;
-	private JLabel lblWindow;
-	private JButton btnInfo;
-	private JButton btnUsage;
-	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private final Action actionLeft = new LeftAction();
-	private final Action actionCenter = new CenterAction();
-	private final Action actionRight = new RightAction();
-	private final Action actionStayOnTop = new StayOnTopAction();
-	private final Action actionInfo = new InfoAction();
-	private final Action actionUsage = new ShipStatsAction();
+	private Action actionCenter;
 
 	/**
 	 * Launch the application.
@@ -106,6 +93,9 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 	 * Create the frame.
 	 */
 	public AdmiraltyConsole() {
+		Datastore.updateDataFiles();
+		this.actionAddAdmiral = new AddAdmiralAction();
+		this.actionCenter = new CenterAction();
 		Swing.setLookAndFeel();
 		setTitle(Title);
 		setIconImage(Images.IMG_ASO);
@@ -127,36 +117,43 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		contentPane.add(toolBar, BorderLayout.NORTH);
-		
-		btnInfo = new JButton(actionInfo);
+
+		Action actionInfo = new InfoAction();
+		JButton btnInfo = new JButton(actionInfo);
 		toolBar.add(btnInfo);
 
 		JButton btnAddAdmiral = new JButton(actionAddAdmiral);
 		toolBar.add(btnAddAdmiral);
 
-		btnDeleteAdmiral = new JButton(actionDeleteAdmiral);
+		Action actionDeleteAdmiral = new DeleteAdmiralAction();
+		JButton btnDeleteAdmiral = new JButton(actionDeleteAdmiral);
 		toolBar.add(btnDeleteAdmiral);
-		
-		btnUsage = new JButton(actionUsage);
+
+		Action actionUsage = new ShipStatsAction();
+		JButton btnUsage = new JButton(actionUsage);
 		toolBar.add(btnUsage);
 
 		toolBar.add(Box.createHorizontalGlue());
-		
-		lblWindow = new JLabel(LabelWindowPosition);
+
+		JLabel lblWindow = new JLabel(LabelWindowPosition);
 		toolBar.add(lblWindow);
-		
-		tglbtnLeft = new JToggleButton(actionLeft);
+
+		Action actionLeft = new LeftAction();
+		JToggleButton tglbtnLeft = new JToggleButton(actionLeft);
+		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(tglbtnLeft);
 		toolBar.add(tglbtnLeft);
-		
-		tglbtnCenter = new JToggleButton(actionCenter);
+
+		JToggleButton tglbtnCenter = new JToggleButton(actionCenter);
 		buttonGroup.add(tglbtnCenter);
 		toolBar.add(tglbtnCenter);
-		
-		tglbtnRight = new JToggleButton(actionRight);
+
+		Action actionRight = new RightAction();
+		JToggleButton tglbtnRight = new JToggleButton(actionRight);
 		buttonGroup.add(tglbtnRight);
 		toolBar.add(tglbtnRight);
-		
+
+		Action actionStayOnTop = new StayOnTopAction();
 		tglbtnStayOnTop = new JToggleButton(actionStayOnTop);
 		toolBar.add(tglbtnStayOnTop);
 
