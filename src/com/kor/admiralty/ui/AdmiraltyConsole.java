@@ -58,7 +58,6 @@ import javax.swing.JTabbedPane;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.concurrent.ConcurrentNavigableMap;
 import javax.swing.JToggleButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;

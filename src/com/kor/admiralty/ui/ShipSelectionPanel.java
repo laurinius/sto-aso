@@ -16,17 +16,13 @@
  *******************************************************************************/
 package com.kor.admiralty.ui;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
-
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 
 import com.kor.admiralty.beans.Ship;
 import com.kor.admiralty.enums.PlayerFaction;
@@ -39,8 +35,6 @@ import com.kor.admiralty.ui.renderers.ShipCellRenderer;
 import com.kor.admiralty.ui.resources.Swing;
 import static com.kor.admiralty.ui.resources.Strings.ShipSelectionPanel.*;
 
-import javax.swing.JLabel;
-
 import org.jdesktop.swingx.JXTaskPane;
 
 import java.awt.Container;
@@ -49,15 +43,13 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 
-import javax.swing.JCheckBox;
 import java.awt.Font;
-import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 
-import javax.swing.Action;
-import javax.swing.JList;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
@@ -382,6 +374,10 @@ public class ShipSelectionPanel extends JPanel {
 			}
 		});
 		pnlShips.add(scrollPane, BorderLayout.CENTER);
+		JTextField shipFilter = new JTextField();
+		shipFilter.getDocument().addDocumentListener(
+				(SimpleDocumentListener) e -> shipListModel.setNameFilter(shipFilter.getText()));
+		pnlShips.add(shipFilter, BorderLayout.SOUTH);
 		lstShips = new JList<Ship>(shipListModel);
 		lstShips.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -534,6 +530,24 @@ public class ShipSelectionPanel extends JPanel {
 
 		public void actionPerformed(ActionEvent e) {
 			model.setShowFederation(isSelected(e));
+		}
+	}
+
+	@FunctionalInterface
+	private interface SimpleDocumentListener extends DocumentListener {
+		void update(DocumentEvent e);
+
+		@Override
+		default void insertUpdate(DocumentEvent e) {
+			update(e);
+		}
+		@Override
+		default void removeUpdate(DocumentEvent e) {
+			update(e);
+		}
+		@Override
+		default void changedUpdate(DocumentEvent e) {
+			update(e);
 		}
 	}
 

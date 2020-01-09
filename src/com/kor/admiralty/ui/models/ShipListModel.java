@@ -62,7 +62,8 @@ public class ShipListModel extends AbstractListModel<Ship> {
 	protected boolean showVeryRare = true;
 	protected boolean showUltraRare = true;
 	protected boolean showEpic = true;
-	
+
+	protected String nameFilter = "";
 	
 	public ShipListModel() {
 		this.ships = new ArrayList<Ship>();
@@ -195,6 +196,15 @@ public class ShipListModel extends AbstractListModel<Ship> {
 
 	public void setShowSmallCraft(boolean showSmallCraft) {
 		this.showSmallCraft = showSmallCraft;
+		updateIncluded();
+	}
+
+	public String getNameFilter() {
+		return nameFilter;
+	}
+
+	public void setNameFilter(String nameFilter) {
+		this.nameFilter = nameFilter;
 		updateIncluded();
 	}
 
@@ -384,6 +394,10 @@ public class ShipListModel extends AbstractListModel<Ship> {
 			if (!showEpic) return false;
 			break;
 		default:
+		}
+
+		if (!ship.getName().toLowerCase().contains(nameFilter.trim().toLowerCase())) {
+			return false;
 		}
 		
 		return true;
