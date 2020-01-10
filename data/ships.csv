@@ -145,7 +145,7 @@ Federation,6,Temporal Science Vessel (T6),Rare,Sci,22,36,50,+10 SCI per EngShip,
 Federation,6,Advanced Escort (T6),Rare,Tac,16,68,24,+10 TAC per EngShip,Numerical Superiority
 Federation,6,Caitian Shikaris Escort (T6),Rare,Tac,23,49,36,+10 TAC per EngShip,Hit And Run
 Federation,6,Heavy Destroyer (T6),Rare,Tac,35,57,16,-25% Maintenance per SciShip,Weapon System Synergy
-Federation,6,Heavy Escort Carrier (T6),Rare,Tac,25,65,18,+8 SCI per EngShip or TacShip,Coordinated Assault
+Federation,6,Heavy Strike Wing Escort (T6),Rare,Tac,25,65,18,+8 SCI per EngShip or TacShip,Coordinated Assault
 Federation,6,Phantom Intel Escort (T6),Rare,Tac,26,60,22,+10 ENG per TacShip,Reciprocity
 Federation,6,Recon Destroyer [T6],Rare,Tac,19,52,37,+10 SCI per TacShip,Jubilant Cadence
 Federation,6,Tactical Escort (T6),Rare,Tac,23,69,16,2.5x Critical Rating from TAC,Withering Barrage
@@ -199,7 +199,7 @@ Federation,6,Andorian Thozyn Pilot Escort (T6),Very Rare,Tac,26,65,26,-25% Maint
 Federation,6,Fleet Advanced Escort (T6),Very Rare,Tac,18,73,26,+8 TAC per EngShip or SciShip,
 Federation,6,Fleet Caitian Shikaris Escort (T6),Very Rare,Tac,23,57,37,2.5x Critical Rating from TAC,
 Federation,6,Fleet Heavy Destroyer (T6),Very Rare,Tac,37,62,18,+8 SCI per Any Ship,
-Federation,6,Fleet Heavy Escort Carrier (T6),Very Rare,Tac,27,70,20,+5 SCI and ENG per EngShip and TacShip,
+Federation,6,Fleet Heavy Strike Wing Escort (T6),Very Rare,Tac,27,70,20,+5 SCI and ENG per EngShip and TacShip,
 Federation,6,Fleet Phantom Intel Escort (T6),Very Rare,Tac,30,63,24,+8 ENG and SCI per TacShip,
 Federation,6,Fleet Recon Destroyer [T6],Very Rare,Tac,20,58,39,+35 SCI when Alone,
 Federation,6,Fleet Tactical Escort (T6),Very Rare,Tac,25,74,18,Ignores +/- TAC from Events,
