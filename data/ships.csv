@@ -139,7 +139,6 @@ Federation,6,Advanced Research Vessel (T6),Rare,Sci,31,20,57,+8 SCI per EngShip 
 Federation,6,Carrier (T6),Rare,Sci,34,29,45,1.5x Critical Rating from TAC and ENG,Insult To Injury
 Federation,6,Experimental Science Vessel (T6),Rare,Sci,22,28,58,+8 SCI per Any Ship,Radiant Nanite Cloud
 Federation,6,Long Range Science Vessel (T6),Rare,Sci,21,21,66,2.5x Critical Rating from SCI,Ablative Field Projector
-Federation,6,Pathfinder Long Range Science Vessel (T6),Rare,Sci,21,21,66,2.5x Critical Rating from SCI,Ablative Field Projector
 Federation,6,Scryer Intel Science Vessel (T6),Rare,Sci,26,22,60,+10 TAC per SciShip,Emitter Synergy
 Federation,6,Temporal Science Vessel (T6),Rare,Sci,22,36,50,+10 SCI per EngShip,Improved Polarize Hull
 Federation,6,Advanced Escort (T6),Rare,Tac,16,68,24,+10 TAC per EngShip,Numerical Superiority
@@ -466,7 +465,6 @@ Universal,5,Hirogen Hunter Heavy Escort,Ultra Rare,Tac,35,51,19,+5 SCI per EngSh
 Universal,5,Jem'Hadar Attack Ship,Ultra Rare,Tac,29,68,8,-25% Maintenance per SciShip,
 Universal,5,Jem'Hadar Dreadnought Carrier,Ultra Rare,Tac,44,45,16,+8 ENG per SciShip or TacShip,
 Universal,5,Jem'Hadar Heavy Escort Carrier,Ultra Rare,Tac,38,51,16,+8 TAC per EngShip or SciShip,
-Universal,5,,Ultra Rare,Tac,33,51,21,+10 TAC per SciShip,
 Universal,5,Tal Shiar Adapted Battle Cruiser,Ultra Rare,Tac,46,28,31,+15 All Stats when Alone,
 Universal,5,Tal Shiar Adapted Destroyer,Ultra Rare,Tac,24,51,30,+20 ENG and SCI when Alone,
 Universal,5,Undine Nicor Bio-Warship,Ultra Rare,Tac,20,56,29,2.5x Critical Rating from SCI,
