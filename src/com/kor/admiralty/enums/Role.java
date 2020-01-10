@@ -19,7 +19,7 @@ package com.kor.admiralty.enums;
 import static com.kor.admiralty.ui.resources.Strings.Shared.*;
 
 public enum Role {
-	None, Eng, Sci, Tac, Smc;
+	None, Eng, Tac, Sci, Smc;
 	
 	@Override
 	public String toString() {

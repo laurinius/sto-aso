@@ -28,6 +28,20 @@ public class ShipComparator implements Comparator<Ship> {
 		if (compare != 0) return compare;
 		compare = s1.getRole().compareTo(s2.getRole());
 		if (compare != 0) return compare;
+		switch (s1.getRole()) {
+			case Eng:
+				compare = s1.getEng() - s2.getEng();
+				if (compare != 0) return compare;
+				break;
+			case Tac:
+				compare = s1.getTac() - s2.getTac();
+				if (compare != 0) return compare;
+				break;
+			case Sci:
+				compare = s1.getSci() - s2.getSci();
+				if (compare != 0) return compare;
+				break;
+		}
 		return s1.getName().compareTo(s2.getName());
 	}
 
