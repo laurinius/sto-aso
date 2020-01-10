@@ -103,7 +103,7 @@ public class Strings {
 		public static final String DescStayOnTop = "Float this window above the STO game client";
 		public static final String DescInfo = "About the Admiralty System Optimizer";
 		public static final String DescShipStats = "Show ship deployment statistics";
-		public static final String DescDataUpdate = "Force data update download and clears icon cache. May require restart to take effect.";
+		public static final String DescDataUpdate = "Force data update download and clears icon cache. Closes the application after update.";
 		public static final String LabelAbout = "About";
 		public static final String MsgVersionInfo = "<html><div style=\"width: 300px;\"><p><b>Star Trek Online - Admiralty System Optimizer</b><br><b>Version:</b>&nbsp;%s<br><b>Written by:</b>&nbsp;@intrinsical</p><p>&nbsp;</p><p>This is a project of love written in my spare time. If you have any suggestions, feedback or bug reports, please send them to @intrinsical via Star Trek Online's in-game mail system.</p><p>&nbsp;</p><p>A heartfelt thank you to the following good folks who have provided admiralty card information: @daBelgrave, thealexofevil (TrekBBS), pteal1979 (TrekBBS), LootCritter, @boredoftheworld, @UniversalSpartan.</p><p>&nbsp;</p><p>Star Trek Online&reg; is a registered trademark of Cryptic Studios Inc. Star Trek&reg;, Star Trek: The Next Generation&reg;, Star Trek: Deep Space Nine&reg;, Star Trek: Voyager&reg;, and Star Trek: Enterprise&reg; are all registered trademarks of CBS Studios Inc. No copyright infringement is intended. Any copyrighted material is included under fair use principles.</p></div></html>";
 		public static final String LabelShipStats = "Statistics";

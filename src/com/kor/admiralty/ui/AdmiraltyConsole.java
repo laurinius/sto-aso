@@ -362,6 +362,8 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		public void actionPerformed(ActionEvent e) {
 			Datastore.updateDataFiles(true);
 			Datastore.clearCachedIcons();
+			Datastore.setAdmirals(admirals);
+			dispose();
 		}
 	}
 }
