@@ -253,6 +253,11 @@ public class Datastore {
 		newFile.renameTo(oldFile);
 	}
 
+	public static void clearCachedIcons() {
+		ICONCACHE = new TreeMap<>();
+		saveCachedIcons();
+	}
+
 	/*/
 	private static long getCacheTime() {
 		return System.currentTimeMillis() - (7L * 24 * 60 * 60 * 1000);
@@ -275,7 +280,11 @@ public class Datastore {
 	}
 
 	public static void updateDataFiles() {
-		if (Configuration.isDataUpdateEnabled() && isDataFilesStale()) {
+		updateDataFiles(false);
+	}
+
+	public static void updateDataFiles(boolean force) {
+		if (force || (Configuration.isDataUpdateEnabled() && isDataFilesStale())) {
 			for(String filename : DATA_FILES) {
 				File file = Datastore.file(filename);
 				String url = url(filename);

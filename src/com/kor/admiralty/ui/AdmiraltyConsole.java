@@ -134,6 +134,10 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 
 		toolBar.add(Box.createHorizontalGlue());
 
+		Action actionUpdate = new DataUpdateAction();
+		JButton btnUpdate = new JButton(actionUpdate);
+		toolBar.add(btnUpdate);
+
 		JLabel lblWindow = new JLabel(LabelWindowPosition);
 		toolBar.add(lblWindow);
 
@@ -346,6 +350,18 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		}
 		public void actionPerformed(ActionEvent e) {
 			EventQueue.invokeLater(STATS_FRAME);
+		}
+	}
+
+	private class DataUpdateAction extends AbstractAction {
+		public DataUpdateAction() {
+			super(LabelDataUpdate);
+			putValue(SHORT_DESCRIPTION, DescDataUpdate);
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Datastore.updateDataFiles(true);
+			Datastore.clearCachedIcons();
 		}
 	}
 }
