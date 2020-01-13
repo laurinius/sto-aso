@@ -20,7 +20,24 @@ import static com.kor.admiralty.ui.resources.Strings.Shared.*;
 
 public enum Tier {
 	
-	None, SmallCraft, Tier1, Tier2, Tier3, Tier4, Tier5, Tier6;
+	None(0),
+	SmallCraft(5),
+	Tier1(30),
+	Tier2(120),
+	Tier3(270),
+	Tier4(480),
+	Tier5(750),
+	Tier6(1080);
+
+	private int maintenanceTime;
+
+	Tier(int maintenanceTime) {
+		this.maintenanceTime = maintenanceTime;
+	}
+
+	public int getMaintenanceTimeMinutes() {
+		return maintenanceTime;
+	}
 	
 	public String getMaintenanceTime() {
 		return getMaintenanceTime(this);

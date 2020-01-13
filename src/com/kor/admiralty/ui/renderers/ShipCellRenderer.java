@@ -74,7 +74,7 @@ public class ShipCellRenderer extends BasicShipCellRenderer {
 		gbl_pnlStats.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_pnlStats.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		pnlStats.setLayout(gbl_pnlStats);
-		
+
 		lblEng = new JLabel("0", Images.ICON_ENG, JLabel.LEFT);
 		lblEng.setForeground(Color.WHITE);
 		GridBagConstraints gbc_lblEng = new GridBagConstraints();
@@ -83,7 +83,7 @@ public class ShipCellRenderer extends BasicShipCellRenderer {
 		gbc_lblEng.gridx = 0;
 		gbc_lblEng.gridy = 0;
 		pnlStats.add(lblEng, gbc_lblEng);
-		
+
 		lblTac = new JLabel("0", Images.ICON_TAC, JLabel.LEFT);
 		lblTac.setForeground(Color.WHITE);
 		lblTac.setIconTextGap(2);
@@ -93,7 +93,7 @@ public class ShipCellRenderer extends BasicShipCellRenderer {
 		gbc_lblTac.gridx = 1;
 		gbc_lblTac.gridy = 0;
 		pnlStats.add(lblTac, gbc_lblTac);
-		
+
 		lblSci = new JLabel("0", Images.ICON_SCI, JLabel.LEFT);
 		lblSci.setForeground(Color.WHITE);
 		GridBagConstraints gbc_lblSci = new GridBagConstraints();
@@ -101,7 +101,7 @@ public class ShipCellRenderer extends BasicShipCellRenderer {
 		gbc_lblSci.gridx = 2;
 		gbc_lblSci.gridy = 0;
 		pnlStats.add(lblSci, gbc_lblSci);
-		
+
 		lblAbility = new JLabel("Special Ability");
 		lblAbility.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblAbility.setForeground(Color.WHITE);
@@ -112,8 +112,12 @@ public class ShipCellRenderer extends BasicShipCellRenderer {
 		gbc_lblAbility.gridx = 1;
 		gbc_lblAbility.gridy = 2;
 		add(lblAbility, gbc_lblAbility);
-		
+
 		setShip(null);
+	}
+
+	protected void init() {
+
 	}
 	
 	public void setShip(Ship ship) {

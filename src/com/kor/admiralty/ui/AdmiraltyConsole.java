@@ -22,25 +22,16 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
-import javax.swing.Box;
-import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
-import javax.swing.JButton;
-import javax.swing.AbstractAction;
 
 import java.awt.event.ActionEvent;
 import java.beans.Beans;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-
-import javax.swing.Action;
+import java.util.*;
 
 import com.kor.admiralty.beans.Admiral;
 import com.kor.admiralty.beans.Admirals;
@@ -53,14 +44,9 @@ import com.kor.admiralty.ui.resources.Swing;
 import static com.kor.admiralty.ui.resources.Strings.Empty;
 import static com.kor.admiralty.ui.resources.Strings.AdmiraltyConsole.*;
 
-import javax.swing.JTabbedPane;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JToggleButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
 
 public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChangeListener, UncaughtExceptionHandler {
 
@@ -184,6 +170,28 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 			admiralMap.put(admiral, panel);
 			admiral.addPropertyChangeListener(this);
 		}
+
+		Timer timer = new Timer(5000, e -> {
+			long now = System.currentTimeMillis();
+			for (Admiral admiral : admiralMap.keySet()) {
+				Set<String> ready = new HashSet<>();
+				for (Map.Entry<String, Long> entry : admiral.getMaintenance().entrySet()) {
+					if (entry.getValue() != null && now > entry.getValue()) {
+						ready.add(entry.getKey());
+					}
+				}
+				for (String ship : ready) {
+					admiral.removeMaintenance(ship);
+					admiral.addActive(ship);
+				}
+				if (!admiral.getMaintenance().isEmpty()) {
+					admiralMap.get(admiral).lstMaintenance.invalidate();
+					admiralMap.get(admiral).lstMaintenance.repaint();
+				}
+			}
+		});
+		timer.setInitialDelay(1);
+		timer.start();
 	}
 
 	public SortedMap<String, Ship> getShipDatabase() {

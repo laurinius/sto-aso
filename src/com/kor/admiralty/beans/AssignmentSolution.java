@@ -38,8 +38,10 @@ public class AssignmentSolution implements HasScore {
 	protected int critChance;
 	protected double maintenanceReduction;
 	protected double score;
+
+	protected int duration;
 	
-	public AssignmentSolution(int eventCritRate, int ... shipIndexes) {
+	public AssignmentSolution(int duration, int eventCritRate, int ... shipIndexes) {
 		this.eventCritRate = eventCritRate;
 		this.shipIndexes = shipIndexes;
 		this.ships = new Ship[shipIndexes.length];
@@ -53,6 +55,11 @@ public class AssignmentSolution implements HasScore {
 		this.ignoreEventEng = false;
 		this.ignoreEventTac = false;
 		this.ignoreEventSci = false;
+		this.duration = duration;
+	}
+
+	public int getDuration() {
+		return duration;
 	}
 	
 	public int getEventCritRate() {

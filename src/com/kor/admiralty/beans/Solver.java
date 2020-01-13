@@ -151,7 +151,7 @@ public class Solver {
 		Ship ship1 = index1 >= 0 ? ships.get(index1) : null;
 		Ship ship2 = index2 >= 0 ? ships.get(index2) : null;
 		Ship ship3 = index3 >= 0 ? ships.get(index3) : null;
-		AssignmentSolution solution = new AssignmentSolution(assignment.getEventCritRate(), index1, index2, index3);
+		AssignmentSolution solution = new AssignmentSolution(assignment.getDuration(), assignment.getEventCritRate(), index1, index2, index3);
 		if (ship1 != null) {
 			solution.addEng(ship1.getEng());
 			solution.addTac(ship1.getTac());

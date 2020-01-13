@@ -68,7 +68,7 @@ public class Configuration {
 
     public enum Names {
         DATA_UPDATE_URL("data.updateUrl","https://github.com/laurinius/sto-aso/raw/master/%s"),
-        DATA_UPDATE_ENABLED("data.updateEnabled","true"),
+        DATA_UPDATE_ENABLED("data.updateEnabled","false"),
         DATA_UPDATE_INTERVAL("data.updateIntervalDays","7"),
         DATA_LAST_UPDATED("data.lastUpdated","0");
 

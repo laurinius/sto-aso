@@ -43,6 +43,7 @@ import com.kor.admiralty.io.Datastore;
 import com.kor.admiralty.ui.components.JColumnList;
 import com.kor.admiralty.ui.components.JListComponentAdapter;
 import com.kor.admiralty.ui.models.ShipListModel;
+import com.kor.admiralty.ui.renderers.MaintenanceShipCellRenderer;
 import com.kor.admiralty.ui.renderers.ShipCellRenderer;
 import com.kor.admiralty.ui.renderers.StarshipTraitCellRenderer;
 import com.kor.admiralty.ui.resources.Images;
@@ -59,10 +60,7 @@ import java.beans.Beans;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -94,6 +92,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 	protected JComboBox<PlayerFaction> cbxFaction;
 	protected JComboBox<ShipPriority> cbxShipPriority;
 	protected ListCellRenderer<Ship> shipCellRenderer;
+	protected MaintenanceShipCellRenderer maintenanceShipCellRenderer;
 	protected JList<Ship> lstActive;
 	protected JList<Ship> lstMaintenance;
 	protected JList<Ship> lstOneTimeShips;
@@ -397,7 +396,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 				}
 			}
 		});
-		lstMaintenance.setCellRenderer(shipCellRenderer);
+		lstMaintenance.setCellRenderer(maintenanceShipCellRenderer);
 		sclMaintenance.setViewportView(lstMaintenance);
 
 		btnAllActive = new JButton(actionAllMaintenanceToActive);
@@ -753,6 +752,8 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 		}
 		this.admiral = admiral;
 		if (this.admiral != null) {
+			maintenanceShipCellRenderer = MaintenanceShipCellRenderer.cellRenderer(admiral);
+			lstMaintenance.setCellRenderer(maintenanceShipCellRenderer);
 			txtName.setText(admiral.getName());
 			cbxFaction.setSelectedItem(admiral.getFaction());
 			cbxShipPriority.setSelectedItem(admiral.getPrioritizeActive() ? ShipPriority.Active : ShipPriority.OneTime);
@@ -1160,14 +1161,15 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 				JOptionPane.showMessageDialog(AdmiraltyConsole.CONSOLE, MsgNoShipsToDeploy);
 				return;
 			}
-			
+
+			long now = System.currentTimeMillis();
 			int shipCount = 0;
-			List<Ship> ships = new ArrayList<Ship>();
+			Map<String, Long> ships = new TreeMap<>();
 			CompositeSolution cs = solutions.get(solutionIndex);
 			for (AssignmentSolution solution : cs.getSolutions()) {
 				for (Ship ship : solution.getShips()) {
 					if (ship != null) {
-						ships.add(ship);
+						ships.put(ship.getName(), calculateReadyTime(now, solution, ship));
 						shipCount++;
 					}
 				}
@@ -1181,5 +1183,13 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 			String message = admiral.assignShips(ships);
 			JOptionPane.showMessageDialog(AdmiraltyConsole.CONSOLE, message);
 		}
+	}
+
+	public static long calculateReadyTime(long now, AssignmentSolution solution, Ship ship) {
+		long assignmentDuration = solution.getDuration() * 60_000L;
+		long maintenanceTime = ship.getTier().getMaintenanceTimeMinutes() * 60_000L;
+		double maintenanceTimeReduction = Math.min(Math.max(solution.getMaintenanceReduction(), 0d), 1d);
+		maintenanceTime = maintenanceTime - (long)(maintenanceTime * maintenanceTimeReduction);
+		return now + assignmentDuration + maintenanceTime;
 	}
 }

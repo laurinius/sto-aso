@@ -29,6 +29,7 @@ import com.kor.admiralty.beans.Assignment;
 import com.kor.admiralty.beans.AssignmentSolution;
 import com.kor.admiralty.beans.CompositeSolution;
 import com.kor.admiralty.beans.Ship;
+import com.kor.admiralty.ui.AdmiralPanel;
 import com.kor.admiralty.ui.AdmiraltyConsole;
 import com.kor.admiralty.ui.AssignmentPanel;
 import com.kor.admiralty.ui.resources.Images;
@@ -55,6 +56,8 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.kor.admiralty.ui.resources.Strings.Empty;
 import static com.kor.admiralty.ui.resources.Strings.AdmiralPanel.*;
@@ -432,14 +435,15 @@ public class AssignmentSelectionPanel extends JPanel implements AdmiralUI {
 				JOptionPane.showMessageDialog(AdmiraltyConsole.CONSOLE, MsgNoShipsToDeploy);
 				return;
 			}
-			
+
+			long now = System.currentTimeMillis();
 			int shipCount = 0;
-			List<Ship> ships = new ArrayList<Ship>();
+			Map<String, Long> ships = new TreeMap<>();
 			CompositeSolution cs = solutions.get(solutionIndex);
 			for (AssignmentSolution solution : cs.getSolutions()) {
 				for (Ship ship : solution.getShips()) {
 					if (ship != null) {
-						ships.add(ship);
+						ships.put(ship.getName(), AdmiralPanel.calculateReadyTime(now, solution, ship));
 						shipCount++;
 					}
 				}
