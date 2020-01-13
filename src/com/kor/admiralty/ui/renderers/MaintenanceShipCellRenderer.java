@@ -1,17 +1,15 @@
 package com.kor.admiralty.ui.renderers;
 
 import com.kor.admiralty.beans.Admiral;
+import com.kor.admiralty.beans.Maintenance;
 import com.kor.admiralty.beans.Ship;
 import com.kor.admiralty.ui.resources.Swing;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class MaintenanceShipCellRenderer extends ShipCellRenderer {
@@ -55,8 +53,10 @@ public class MaintenanceShipCellRenderer extends ShipCellRenderer {
                 lblReadyTime.setText("");
                 lblReadyTime.setForeground(Swing.ColorCommon);
             } else {
-                Long readyTime = admiral.getMaintenance().get(ship.getName());
-                lblReadyTime.setText(readyTime != null ? readyDuration(readyTime) : "---");
+                Optional<Long> readyTime = admiral.findMaintenance(ship.getName())
+                        .map(Maintenance::getReadyTime);
+
+                lblReadyTime.setText(readyTime.isPresent() ? readyDuration(readyTime.get()) : "---");
                 lblReadyTime.setForeground(Swing.ColorCommon);
             }
         }

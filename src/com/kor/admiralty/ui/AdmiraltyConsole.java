@@ -35,6 +35,7 @@ import java.util.*;
 
 import com.kor.admiralty.beans.Admiral;
 import com.kor.admiralty.beans.Admirals;
+import com.kor.admiralty.beans.Maintenance;
 import com.kor.admiralty.beans.Ship;
 import com.kor.admiralty.io.Datastore;
 import com.kor.admiralty.ui.components.ExceptionDialog;
@@ -175,9 +176,9 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 			long now = System.currentTimeMillis();
 			for (Admiral admiral : admiralMap.keySet()) {
 				Set<String> ready = new HashSet<>();
-				for (Map.Entry<String, Long> entry : admiral.getMaintenance().entrySet()) {
-					if (entry.getValue() != null && now > entry.getValue()) {
-						ready.add(entry.getKey());
+				for (Maintenance maintenance : admiral.getMaintenance()) {
+					if (maintenance.getReadyTime() != null && now > maintenance.getReadyTime()) {
+						ready.add(maintenance.getName());
 					}
 				}
 				for (String ship : ready) {

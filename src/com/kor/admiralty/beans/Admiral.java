@@ -19,12 +19,9 @@ package com.kor.admiralty.beans;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 import com.kor.admiralty.Globals;
 import com.kor.admiralty.enums.PlayerFaction;
@@ -49,7 +46,7 @@ public class Admiral {
 	protected String name;
 	protected PlayerFaction faction;
 	protected List<String> active;
-	protected Map<String, Long> maintenance;
+	private List<Maintenance> maintenance;
 	//protected Map<String, Long> maintenanceV2;
 	protected List<String> oneTime;
 	protected Map<String, Integer> usage;
@@ -62,7 +59,7 @@ public class Admiral {
 		this.name = "New Admiral";
 		this.faction = PlayerFaction.Federation;
 		this.active = new ArrayList<String>();
-		this.maintenance = new TreeMap<>();
+		this.maintenance = new ArrayList<>();
 		//this.maintenanceV2 = new HashMap<String, Long>();
 		this.oneTime = new ArrayList<String>();
 		this.usage = new HashMap<String, Integer>();
@@ -108,13 +105,22 @@ public class Admiral {
 		change.firePropertyChange(PROP_ACTIVE, oldList, this.active);
 	}
 
-	public Map<String, Long> getMaintenance() {
+	public List<Maintenance> getMaintenance() {
 		return maintenance;
 	}
 
+	public Optional<Maintenance> findMaintenance(String name) {
+		if (name == null) {
+			return Optional.empty();
+		}
+		return maintenance.stream()
+				.filter(m -> name.equals(m.getName()))
+				.findFirst();
+	}
+
 	@XmlElement(name = "maintenance")
-	public void setMaintenance(Map<String, Long> maintenance) {
-		Map<String, Long> oldList = new TreeMap<String, Long>(this.maintenance);
+	public void setMaintenance(List<Maintenance> maintenance) {
+		List<Maintenance> oldList = new ArrayList<>(this.maintenance);
 		this.maintenance = maintenance;
 		change.firePropertyChange(PROP_MAINTENANCE, oldList, this.maintenance);
 	}
@@ -208,17 +214,18 @@ public class Admiral {
 	}
 
 	public void addMaintenance(String shipName) {
-		if (!maintenance.containsKey(shipName)) {
-			Map<String, Long> oldMaintenance = new TreeMap<>(maintenance);
-			maintenance.put(shipName, null);
+		if (!findMaintenance(shipName).isPresent()) {
+			List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
+			maintenance.add(new Maintenance(shipName, null));
 			change.firePropertyChange(PROP_MAINTENANCE, oldMaintenance, maintenance);
 		}
 	}
 
 	public void removeMaintenance(String shipName) {
-		if (maintenance.containsKey(shipName)) {
-			Map<String, Long> oldMaintenance = new TreeMap<>(maintenance);
-			maintenance.remove(shipName);
+		Optional<Maintenance> m = findMaintenance(shipName);
+		if (m.isPresent()) {
+			List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
+			maintenance.remove(m.get());
 			change.firePropertyChange(PROP_MAINTENANCE, oldMaintenance, maintenance);
 		}
 	}
@@ -272,40 +279,40 @@ public class Admiral {
 
 	public Set<Ship> getMaintenanceShips() {
 		Set<Ship> ships = new TreeSet<Ship>();
-		_getShips(maintenance.keySet(), ships);
+		_getShips(maintenance.stream().map(Maintenance::getName).collect(Collectors.toSet()), ships);
 		//_getShips(schedule.keySet(), ships);
 		return ships;
 	}
 
 	@XmlTransient
 	public void setMaintenanceShips(Set<Ship> ships) {
-		Map<String, Long> oldMaintenance = new TreeMap<>(maintenance);
-		setShips(maintenance, ships);
+		List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
+		maintenance = ships.stream().map(s -> new Maintenance(s.getName(), null)).collect(Collectors.toList());
 		change.firePropertyChange(PROP_MAINTENANCE, oldMaintenance, maintenance);
 	}
 
 	public void addMaintenanceShips(Collection<Ship> ships) {
-		Map<String, Long> oldMaintenance = new TreeMap<>(maintenance);
-		addShips(maintenance, ships);
+		List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
+		ships.stream().map(s -> new Maintenance(s.getName(), null)).forEach(m -> maintenance.add(m));
 		change.firePropertyChange(PROP_MAINTENANCE, oldMaintenance, maintenance);
 	}
 	
 	public void removeMaintenanceShips(Collection<Ship> ships) {
-		Map<String, Long> oldMaintenance = new TreeMap<>(maintenance);
-		removeShips(maintenance, ships);
+		List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
+		maintenance.removeIf(m -> ships.stream().anyMatch(s -> s.getName().equals(m.getName())));
 		change.firePropertyChange(PROP_MAINTENANCE, oldMaintenance, maintenance);
 	}
 
 	public void removeActiveOrMaintenanceShips(Collection<Ship> ships) {
 		List<String> oldActive = new ArrayList<String>(active);
-		Map<String, Long> oldMaintenance = new TreeMap<>(maintenance);
+		List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
 		for (Ship ship : ships) {
 			String name = ship.getName();
 			if (active.contains(name)) {
 				active.remove(name);
 			}
-			else if (maintenance.containsKey(name)) {
-				maintenance.remove(name);
+			else {
+				maintenance.removeIf(m -> m.getName().equals(name));
 			}
 		}
 		change.firePropertyChange(PROP_ACTIVE, oldActive, active);
@@ -341,7 +348,7 @@ public class Admiral {
 	public List<Ship> getStarshipTraits() {
 		List<Ship> ships = new ArrayList<Ship>();
 		_getShips(active, ships, ShipViewMode.StarshipTrait);
-		_getShips(maintenance.keySet(), ships, ShipViewMode.StarshipTrait);
+		_getShips(maintenance.stream().map(Maintenance::getName).collect(Collectors.toSet()), ships, ShipViewMode.StarshipTrait);
 		Collections.sort(ships);
 		return ships;
 	}
@@ -350,7 +357,7 @@ public class Admiral {
 		StringBuilder sbMaintenance = new StringBuilder();
 		StringBuilder sbOneTime = new StringBuilder();
 		List<String> oldActive = new ArrayList<String>(active);
-		Map<String, Long> oldMaintenance = new TreeMap<>(maintenance);
+		List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
 		List<String> oldOneTime = new ArrayList<String>(oneTime);
 		Map<String, Integer> oldUsage = new HashMap<String, Integer>(usage);
 		for (Map.Entry<String, Long> ship : ships.entrySet()) {
@@ -358,7 +365,7 @@ public class Admiral {
 			String shipName = ship.getKey();
 			if (active.remove(shipName)) {
 				// Move active ship to maintenance roster
-				maintenance.put(shipName, ship.getValue());
+				maintenance.add(new Maintenance(shipName, ship.getValue()));
 				sbMaintenance.append("<li>").append(shipName).append("</li>");
 				useShip(shipName);
 			}
@@ -475,8 +482,8 @@ public class Admiral {
 					usageData.add(ship);
 				}
 			}
-			for (String shipName : admiral.getMaintenance().keySet()) {
-				Ship ship = ships.get(shipName.toLowerCase());
+			for (Maintenance m : admiral.getMaintenance()) {
+				Ship ship = ships.get(m.getName().toLowerCase());
 				if (!usageData.contains(ship)) {
 					ship.setUsageCount(0);
 					usageData.add(ship);
@@ -551,9 +558,7 @@ public class Admiral {
 				active.remove(name);
 				active.add(newName);
 			}
-			if (maintenance.containsKey(name)) {
-				maintenance.put(newName, maintenance.remove(name));
-			}
+			maintenance.stream().filter(m -> m.getName().equals(name)).forEach(m -> m.setName(newName));
 			/*
 			if (maintenanceV2.containsKey(name)) {
 				long time = maintenanceV2.get(name);
@@ -583,11 +588,11 @@ public class Admiral {
 			}
 		}
 		
-		for (String name : maintenance.keySet()) {
-			String shipId = name.toLowerCase();
+		for (Maintenance m : maintenance) {
+			String shipId = m.getName().toLowerCase();
 			if (!database.containsKey(shipId)) {
 				// Ship does not exist in the ship database
-				maintenanceErr.add(name);
+				maintenanceErr.add(m.getName());
 			}
 			else {
 				// Mark ship as owned by player
@@ -626,7 +631,7 @@ public class Admiral {
 			active.removeAll(activeErr);
 		}
 		if (!maintenanceErr.isEmpty()) {
-			maintenance.keySet().removeAll(maintenanceErr);
+			maintenance.removeIf(m -> maintenanceErr.stream().anyMatch(mErr -> mErr.equals(m.getName())));
 		}
 		/*
 		if (!maintenanceV2Err.isEmpty()) {
@@ -668,23 +673,6 @@ public class Admiral {
 		}*/
 	}
 
-	protected void setShips(Map<String, Long> names, Set<Ship> ships) {
-		names.clear();
-		addShips(names, ships);
-	}
-
-	protected void addShips(Map<String, Long> names, Collection<Ship> ships) {
-		for (Ship ship : ships) {
-			names.put(ship.getName(), null);
-		}
-	}
-
-	protected void removeShips(Map<String, Long> names, Collection<Ship> ships) {
-		for (Ship ship : ships) {
-			names.remove(ship.getName());
-		}
-	}
-	
 	protected void setShips(List<String> names, Set<Ship> ships) {
 		names.clear();
 		addShips(names, ships);
