@@ -16,20 +16,14 @@
  *******************************************************************************/
 package com.kor.admiralty.ui;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Window;
 
-import javax.swing.JTabbedPane;
 import java.awt.GridBagLayout;
-import javax.swing.JScrollPane;
 import java.awt.GridBagConstraints;
-import javax.swing.JList;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import com.kor.admiralty.Globals;
 import com.kor.admiralty.beans.Admiral;
@@ -48,13 +42,12 @@ import com.kor.admiralty.ui.renderers.ShipCellRenderer;
 import com.kor.admiralty.ui.renderers.StarshipTraitCellRenderer;
 import com.kor.admiralty.ui.resources.Images;
 import com.kor.admiralty.ui.resources.Swing;
+import com.kor.admiralty.ui.util.JNumberTextField;
 import com.kor.admiralty.ui.util.TextFileFilter;
 
 import static com.kor.admiralty.ui.resources.Strings.Empty;
 import static com.kor.admiralty.ui.resources.Strings.AdmiralPanel.*;
 
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import java.awt.Insets;
 import java.beans.Beans;
 import java.beans.PropertyChangeEvent;
@@ -62,11 +55,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.*;
 
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.AbstractAction;
 import java.awt.event.ActionEvent;
-import javax.swing.Action;
 import java.awt.event.ActionListener;
 import java.awt.GridLayout;
 import javax.swing.event.DocumentEvent;
@@ -78,10 +67,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
-import javax.swing.JToggleButton;
-import javax.swing.ListCellRenderer;
-import javax.swing.ButtonGroup;
-import javax.swing.SwingConstants;
 
 public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 
@@ -110,6 +95,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 	protected JButton btnImportShips;
 	protected JButton btnMaintenance;
 	protected JButton btnAllMaintenance;
+	protected JNumberTextField textManualAssignmentTime;
 	protected JButton btnAddOneTime;
 	protected JButton btnRemoveOneTime;
 	protected JButton btnPrev;
@@ -354,7 +340,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 					Ship ship = shipActiveModel.getElementAt(index);
 					lstActive.clearSelection();
 					admiral.removeActive(ship.getName());
-					admiral.addMaintenance(ship.getName());
+					admiral.addMaintenance(ship.getName(), textManualAssignmentTime.getInt());
 				}
 			}
 		});
@@ -438,13 +424,15 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 		gbc_btnAllMaintenance.gridy = 5;
 		pnlPrimaryShips.add(btnAllMaintenance, gbc_btnAllMaintenance);
 
-		JLabel lblBottom = new JLabel(Empty);
-		GridBagConstraints gbc_lblBottom = new GridBagConstraints();
-		gbc_lblBottom.weightx = 1.0;
-		gbc_lblBottom.weighty = 100.0;
-		gbc_lblBottom.gridx = 1;
-		gbc_lblBottom.gridy = 6;
-		pnlPrimaryShips.add(lblBottom, gbc_lblBottom);
+		textManualAssignmentTime = new JNumberTextField(4);
+		GridBagConstraints gbc_textManualAssignmentTime = new GridBagConstraints();
+		gbc_textManualAssignmentTime.weightx = 1.0;
+		gbc_textManualAssignmentTime.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textManualAssignmentTime.weighty = 100.0;
+		gbc_textManualAssignmentTime.gridx = 1;
+		gbc_textManualAssignmentTime.gridy = 6;
+		gbc_textManualAssignmentTime.anchor = GridBagConstraints.NORTH;
+		pnlPrimaryShips.add(textManualAssignmentTime, gbc_textManualAssignmentTime);
 
 		JPanel pnlOneTime = new JPanel();
 		tabAdmiral.addTab(LabelOneTimeShips, null, pnlOneTime, null);
@@ -1019,7 +1007,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 
 		public void actionPerformed(ActionEvent e) {
 			Set<Ship> ships = admiral.getActiveShips();
-			admiral.addMaintenanceShips(ships);
+			admiral.addMaintenanceShips(ships, textManualAssignmentTime.getInt());
 			admiral.removeActiveShips(ships);
 		}
 	}
@@ -1055,7 +1043,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 			List<Ship> ships = lstActive.getSelectedValuesList();
 			if (!ships.isEmpty()) {
 				admiral.removeActiveShips(ships);
-				admiral.addMaintenanceShips(ships);
+				admiral.addMaintenanceShips(ships, textManualAssignmentTime.getInt());
 			}
 			lstActive.setSelectedIndices(new int[0]);
 			lstMaintenance.setSelectedIndices(new int[0]);

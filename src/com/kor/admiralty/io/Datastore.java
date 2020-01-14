@@ -85,6 +85,10 @@ public class Datastore {
 		}
 		return SHIPS;
 	}
+
+	public static Ship getShip(String name) {
+		return SHIPS.get(name.toLowerCase());
+	}
 	
 	public static SortedMap<String, Event> getEvents() {
 		if (EVENTS.isEmpty()) {

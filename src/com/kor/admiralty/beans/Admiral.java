@@ -214,9 +214,18 @@ public class Admiral {
 	}
 
 	public void addMaintenance(String shipName) {
+		addMaintenance(shipName, null);
+	}
+
+	public void addMaintenance(String shipName, Integer assignmentTimeMinutes) {
 		if (!findMaintenance(shipName).isPresent()) {
+			Long readyTime = null;
+			if (assignmentTimeMinutes != null) {
+				Ship ship = Datastore.getShip(shipName);
+				readyTime = calculateReadyTime(ship, assignmentTimeMinutes, System.currentTimeMillis());
+			}
 			List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
-			maintenance.add(new Maintenance(shipName, null));
+			maintenance.add(new Maintenance(shipName, readyTime));
 			change.firePropertyChange(PROP_MAINTENANCE, oldMaintenance, maintenance);
 		}
 	}
@@ -292,9 +301,22 @@ public class Admiral {
 	}
 
 	public void addMaintenanceShips(Collection<Ship> ships) {
+		addMaintenanceShips(ships, null);
+	}
+
+	public void addMaintenanceShips(Collection<Ship> ships, Integer assignmentTimeMinutes) {
 		List<Maintenance> oldMaintenance = new ArrayList<>(maintenance);
-		ships.stream().map(s -> new Maintenance(s.getName(), null)).forEach(m -> maintenance.add(m));
+		final long now = System.currentTimeMillis();
+		ships.stream().map(s -> new Maintenance(s.getName(), calculateReadyTime(s, assignmentTimeMinutes, now))).forEach(m -> maintenance.add(m));
 		change.firePropertyChange(PROP_MAINTENANCE, oldMaintenance, maintenance);
+	}
+
+	private Long calculateReadyTime(Ship ship, Integer assignmentTimeMinutes, long now) {
+		if (ship == null || assignmentTimeMinutes == null) {
+			return null;
+		}
+		long duration = (ship.getTier().getMaintenanceTimeMinutes() + assignmentTimeMinutes) * 60_000L;
+		return duration + now;
 	}
 	
 	public void removeMaintenanceShips(Collection<Ship> ships) {
