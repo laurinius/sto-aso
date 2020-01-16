@@ -19,8 +19,29 @@ package com.kor.admiralty.enums;
 import static com.kor.admiralty.ui.resources.Strings.Shared.*;
 
 public enum ShipPriority {
-	Active, OneTime;
-	
+	Active("true"),
+	OneTime("false"),
+	OnlyActive("onlyActive");
+
+	private String configValue;
+
+	ShipPriority(String configValue) {
+		this.configValue = configValue;
+	}
+
+	public String getConfigValue() {
+		return this.configValue;
+	}
+
+	public static ShipPriority fromConfigValue(String configValue) {
+		for (ShipPriority sp : values()) {
+			if (sp.configValue.equals(configValue)) {
+				return sp;
+			}
+		}
+		throw new IllegalArgumentException(configValue);
+	}
+
 	@Override
 	public String toString() {
 		return toString(this);
@@ -28,9 +49,10 @@ public enum ShipPriority {
 	
 	protected static String toString(ShipPriority faction) {
 		switch (faction) {
-		case Active: return PriorityActive;
-		case OneTime: return PriorityOneTime;
-		default: return PriorityActive;
+			case OneTime: return PriorityOneTime;
+			case OnlyActive: return PriorityOnlyActive;
+			case Active:
+			default: return PriorityActive;
 		}
 	}
 	

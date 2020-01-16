@@ -87,6 +87,7 @@ public class Strings {
 		
 		public static final String PriorityActive = "Active Ships";
 		public static final String PriorityOneTime = "One-Time Ships";
+		public static final String PriorityOnlyActive = "Only Active";
 	}
 
 	public final class AdmiraltyConsole {

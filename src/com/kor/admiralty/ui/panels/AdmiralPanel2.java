@@ -168,7 +168,7 @@ public class AdmiralPanel2 extends JPanel implements AdmiralUI {
 			cbxShipPriority.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					ShipPriority priority = (ShipPriority) cbxShipPriority.getSelectedItem();
-					admiral.setPrioritizeActive(priority == ShipPriority.Active);
+					admiral.setShipPriority(priority);
 				}
 			});
 		}
@@ -219,7 +219,7 @@ public class AdmiralPanel2 extends JPanel implements AdmiralUI {
 		if (this.admiral != null) {
 			txtName.setText(admiral.getName());
 			cbxFaction.setSelectedItem(admiral.getFaction());
-			cbxShipPriority.setSelectedItem(admiral.getPrioritizeActive() ? ShipPriority.Active : ShipPriority.OneTime);
+			cbxShipPriority.setSelectedItem(admiral.getShipPriority());
 			admiral.addPropertyChangeListener(this);
 		}
 	}

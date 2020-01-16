@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.*;
 
 import com.kor.admiralty.Globals;
 import com.kor.admiralty.enums.PlayerFaction;
+import com.kor.admiralty.enums.ShipPriority;
 import com.kor.admiralty.enums.ShipViewMode;
 import com.kor.admiralty.io.Datastore;
 
@@ -51,7 +52,7 @@ public class Admiral {
 	protected List<String> oneTime;
 	protected Map<String, Integer> usage;
 	protected int numAssignments;
-	protected boolean prioritizeActive;
+	protected ShipPriority shipPriority;
 	protected List<Assignment> assignments;
 	protected PropertyChangeSupport change;
 
@@ -64,7 +65,7 @@ public class Admiral {
 		this.oneTime = new ArrayList<String>();
 		this.usage = new HashMap<String, Integer>();
 		this.numAssignments = 1;
-		this.prioritizeActive = true;
+		this.shipPriority = ShipPriority.Active;
 		this.assignments = new ArrayList<Assignment>();
 		this.change = new PropertyChangeSupport(this);
 		for (int i = 0; i < Globals.MAX_ASSIGNMENTS; i++) {
@@ -175,17 +176,26 @@ public class Admiral {
 		change.firePropertyChange(PROP_ASSIGNMENTCOUNT, oldNum, this.numAssignments);
 	}
 	
-	public boolean getPrioritizeActive() {
-		return prioritizeActive;
+	public String getPrioritizeActive() {
+		return shipPriority.getConfigValue();
 	}
 	
 	@XmlAttribute(name = "prioritizeActive")
-	public void setPrioritizeActive(boolean prioritizeActive) {
-		boolean oldVal = this.prioritizeActive;
-		this.prioritizeActive = prioritizeActive;
-		change.firePropertyChange(PROP_PRIORITIZEACTIVE, oldVal, this.prioritizeActive);
+	public void setPrioritizeActive(String prioritizeActive) {
+		setShipPriority(ShipPriority.fromConfigValue(prioritizeActive));
 	}
-	
+
+	public ShipPriority getShipPriority() {
+		return shipPriority;
+	}
+
+	@XmlTransient
+	public void setShipPriority(ShipPriority shipPriority) {
+		ShipPriority oldVal = this.shipPriority;
+		this.shipPriority = shipPriority;
+		change.firePropertyChange(PROP_PRIORITIZEACTIVE, oldVal, this.shipPriority);
+	}
+
 	public List<Assignment> getAssignments() {
 		return assignments;
 	}
@@ -469,8 +479,11 @@ public class Admiral {
 	*/
 	
 	public List<Ship> getDeployableShips() {
-		List<Ship> ships = new ArrayList<Ship>();
-		if (prioritizeActive) {
+		if (shipPriority == ShipPriority.OnlyActive) {
+			return new ArrayList<>(getActiveShips());
+		}
+		List<Ship> ships = new ArrayList<>();
+		if (shipPriority == ShipPriority.Active) {
 			ships.addAll(getActiveShips());
 			ships.addAll(getOneTimeShips());
 		}

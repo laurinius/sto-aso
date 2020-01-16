@@ -236,7 +236,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 			cbxShipPriority.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					ShipPriority priority = (ShipPriority) cbxShipPriority.getSelectedItem();
-					admiral.setPrioritizeActive(priority == ShipPriority.Active);
+					admiral.setShipPriority(priority);
 				}
 			});
 		}
@@ -744,7 +744,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 			lstMaintenance.setCellRenderer(maintenanceShipCellRenderer);
 			txtName.setText(admiral.getName());
 			cbxFaction.setSelectedItem(admiral.getFaction());
-			cbxShipPriority.setSelectedItem(admiral.getPrioritizeActive() ? ShipPriority.Active : ShipPriority.OneTime);
+			cbxShipPriority.setSelectedItem(admiral.getShipPriority());
 			for (int i = 0; i < Globals.MAX_ASSIGNMENTS; i++) {
 				pnlAssignments[i].setAssignment(admiral.getAssignment(i));
 			}
