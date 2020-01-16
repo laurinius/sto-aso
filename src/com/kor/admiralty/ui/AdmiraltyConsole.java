@@ -214,7 +214,7 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 	public void propertyChange(PropertyChangeEvent e) {
 		Admiral admiral = (Admiral) e.getSource();
 		String property = e.getPropertyName();
-		if (property == com.kor.admiralty.beans.Admiral.PROP_NAME) {
+		if (Objects.equals(property, Admiral.PROP_NAME)) {
 			String newName = e.getNewValue().toString();
 			AdmiralPanel panel = admiralMap.get(admiral);
 			int index = tabAdmirals.indexOfComponent(panel);

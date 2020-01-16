@@ -36,6 +36,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -149,7 +150,7 @@ public class OneTimeShipPanel extends JPanel implements AdmiralUI {
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		String property = e.getPropertyName();
-		if (property == Admiral.PROP_ONETIME) {
+		if (Objects.equals(property, Admiral.PROP_ONETIME)) {
 			uiModel.setShips(admiral.getOneTimeShips());
 			lblOnetimeShips.setText(String.format(HtmlOneTimeShips, uiModel.getSize()));
 		}

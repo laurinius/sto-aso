@@ -87,6 +87,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 	protected ShipListModel shipOneTimeModel;
 	protected ShipListModel shipTraitsModel;
 	protected JLabel lblActive;
+	protected JLabel lblTotal;
 	protected JLabel lblMaintenance;
 	protected JLabel lblOnetimeShips;
 	protected JButton btnAllActive;
@@ -270,6 +271,14 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 		gbc_lblActive.gridx = 0;
 		gbc_lblActive.gridy = 0;
 		pnlPrimaryShips.add(lblActive, gbc_lblActive);
+
+		lblTotal = new JLabel(LabelTotalShips);
+		GridBagConstraints gbc_lblTotal = new GridBagConstraints();
+		gbc_lblTotal.anchor = GridBagConstraints.EAST;
+		gbc_lblTotal.insets = new Insets(5, 5, 0, 5);
+		gbc_lblTotal.gridx = 0;
+		gbc_lblTotal.gridy = 0;
+		pnlPrimaryShips.add(lblTotal, gbc_lblTotal);
 
 		JPanel pnlButtons = new JPanel();
 		pnlButtons.setBorder(null);
@@ -753,6 +762,7 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 			shipOneTimeModel.addShips(admiral.getOneTimeShips());
 			shipTraitsModel.addShips(admiral.getStarshipTraits());
 			lblActive.setText(String.format(HtmlActiveShips, shipActiveModel.getSize()));
+			lblTotal.setText(String.format(HtmlTotalShips, shipActiveModel.getSize()+shipMaintenanceModel.getSize()+shipOneTimeModel.getSize()));
 			lblMaintenance.setText(String.format(HtmlMaintenanceShips, shipMaintenanceModel.getSize()));
 			lblOnetimeShips.setText(String.format(HtmlOneTimeShips, shipOneTimeModel.getSize()));
 			admiral.addPropertyChangeListener(this);
@@ -792,21 +802,24 @@ public class AdmiralPanel extends JPanel implements PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		String property = e.getPropertyName();
-		if (property == Admiral.PROP_NAME) {
+		if (Objects.equals(property, Admiral.PROP_NAME)) {
 			// txtName.setText(admiral.getName());
-		} else if (property == Admiral.PROP_FACTION) {
+		} else if (Objects.equals(property, Admiral.PROP_FACTION)) {
 			cbxFaction.setSelectedItem(admiral.getFaction());
-		} else if (property == Admiral.PROP_ACTIVE) {
+		} else if (Objects.equals(property, Admiral.PROP_ACTIVE)) {
 			shipActiveModel.setShips(admiral.getActiveShips());
 			lblActive.setText(String.format(HtmlActiveShips, shipActiveModel.getSize()));
+			lblTotal.setText(String.format(HtmlTotalShips, shipActiveModel.getSize()+shipMaintenanceModel.getSize()+shipOneTimeModel.getSize()));
 			shipTraitsModel.setShips(admiral.getStarshipTraits());
-		} else if (property == Admiral.PROP_MAINTENANCE) {
+		} else if (Objects.equals(property, Admiral.PROP_MAINTENANCE)) {
 			shipMaintenanceModel.setShips(admiral.getMaintenanceShips());
 			lblMaintenance.setText(String.format(HtmlMaintenanceShips, shipMaintenanceModel.getSize()));
-		} else if (property == Admiral.PROP_ONETIME) {
+			lblTotal.setText(String.format(HtmlTotalShips, shipActiveModel.getSize()+shipMaintenanceModel.getSize()+shipOneTimeModel.getSize()));
+		} else if (Objects.equals(property, Admiral.PROP_ONETIME)) {
 			shipOneTimeModel.setShips(admiral.getOneTimeShips());
 			lblOnetimeShips.setText(String.format(HtmlOneTimeShips, shipOneTimeModel.getSize()));
-		} else if (property == Admiral.PROP_ASSIGNMENTCOUNT) {
+			lblTotal.setText(String.format(HtmlTotalShips, shipActiveModel.getSize()+shipMaintenanceModel.getSize()+shipOneTimeModel.getSize()));
+		} else if (Objects.equals(property, Admiral.PROP_ASSIGNMENTCOUNT)) {
 			int count = admiral.getAssignmentCount();
 			for (int i = 0; i < Globals.MAX_ASSIGNMENTS; i++) {
 				pnlAssignments[i].setVisible(i < count);

@@ -34,6 +34,7 @@ import com.kor.admiralty.ui.models.ShipListModel;
 import com.kor.admiralty.ui.renderers.StarshipTraitCellRenderer;
 
 import java.awt.GridBagLayout;
+import java.util.Objects;
 import javax.swing.ScrollPaneConstants;
 
 public class StarshipTraitsPanel extends JPanel implements AdmiralUI {
@@ -111,7 +112,7 @@ public class StarshipTraitsPanel extends JPanel implements AdmiralUI {
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		String property = e.getPropertyName();
-		if (property == Admiral.PROP_ACTIVE) {
+		if (Objects.equals(property, Admiral.PROP_ACTIVE)) {
 			uiModel.setShips(admiral.getStarshipTraits());
 		}
 	}

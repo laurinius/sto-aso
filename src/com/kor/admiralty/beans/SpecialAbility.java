@@ -18,6 +18,8 @@ package com.kor.admiralty.beans;
 
 import com.kor.admiralty.rewards.Reward;
 
+import java.util.Objects;
+
 public abstract class SpecialAbility implements Comparable<SpecialAbility> {
 	
 	public static final String STR_UNKNOWN = "Unknown".intern();
@@ -46,7 +48,7 @@ public abstract class SpecialAbility implements Comparable<SpecialAbility> {
 	
 	@Override
 	public String toString() {
-		if (desc == STR_UNKNOWN) {
+		if (Objects.equals(desc, STR_UNKNOWN)) {
 			return toParamString();
 		}
 		else {

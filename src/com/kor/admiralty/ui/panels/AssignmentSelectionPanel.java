@@ -18,8 +18,7 @@ package com.kor.admiralty.ui.panels;
 
 import java.beans.Beans;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.JPanel;
 
@@ -56,8 +55,6 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.Map;
-import java.util.TreeMap;
 
 import static com.kor.admiralty.ui.resources.Strings.Empty;
 import static com.kor.admiralty.ui.resources.Strings.AdmiralPanel.*;
@@ -307,7 +304,7 @@ public class AssignmentSelectionPanel extends JPanel implements AdmiralUI {
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		String property = e.getPropertyName();
-		if (property == Admiral.PROP_ASSIGNMENTCOUNT) {
+		if (Objects.equals(property, Admiral.PROP_ASSIGNMENTCOUNT)) {
 			int count = admiral.getAssignmentCount();
 			for (int i = 0; i < Globals.MAX_ASSIGNMENTS; i++) {
 				pnlAssignments[i].setVisible(i < count);

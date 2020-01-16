@@ -45,6 +45,7 @@ import javax.swing.event.DocumentListener;
 
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.util.Objects;
 import javax.swing.SwingConstants;
 
 public class AdmiralPanel2 extends JPanel implements AdmiralUI {
@@ -231,9 +232,9 @@ public class AdmiralPanel2 extends JPanel implements AdmiralUI {
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		String property = e.getPropertyName();
-		if (property == Admiral.PROP_NAME) {
+		if (Objects.equals(property, Admiral.PROP_NAME)) {
 			// txtName.setText(admiral.getName());
-		} else if (property == Admiral.PROP_FACTION) {
+		} else if (Objects.equals(property, Admiral.PROP_FACTION)) {
 			cbxFaction.setSelectedItem(admiral.getFaction());
 		}
 

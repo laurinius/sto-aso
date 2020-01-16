@@ -143,6 +143,7 @@ public class Strings {
 		public static final String LabelExportShips = "Export";
 		public static final String LabelImportShips = "Import";
 		public static final String LabelActiveShips = "Active Ships";
+		public static final String LabelTotalShips = "Total Ships";
 		public static final String LabelMaintenanceShips = "Maintenance Ships";
 		public static final String LabelOneTimeShips = "One-Time Ships";
 		public static final String LabelNumAssignments = "Number of Assignments";
@@ -153,6 +154,7 @@ public class Strings {
 		public static final String LabelBest = "Best";
 		public static final String LabelNext = "Next";
 		public static final String HtmlActiveShips = "<html><b>Active Ships</b> (%d ships)</html>";
+		public static final String HtmlTotalShips = "<html><b>Total Ships</b> %d</html>";
 		public static final String HtmlMaintenanceShips = "<html><b>Maintenance Ships</b> (%d ships)</html>";
 		public static final String HtmlOneTimeShips = "<html><b>One-Time Ships</b> (%d ships)</html>";
 		public static final String HtmlPlanAssignments = "<html><center><u>P</u>lan<br>Assignments</center></html>";

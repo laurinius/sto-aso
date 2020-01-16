@@ -30,6 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -273,10 +274,10 @@ public class ShipRosterPanel extends JPanel implements AdmiralUI {
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		String property = e.getPropertyName();
-		if (property == Admiral.PROP_ACTIVE) {
+		if (Objects.equals(property, Admiral.PROP_ACTIVE)) {
 			modelActive.setShips(admiral.getActiveShips());
 			lblActive.setText(String.format(HtmlActiveShips, modelActive.getSize()));
-		} else if (property == Admiral.PROP_MAINTENANCE) {
+		} else if (Objects.equals(property, Admiral.PROP_MAINTENANCE)) {
 			modelMaintenance.setShips(admiral.getMaintenanceShips());
 			lblMaintenance.setText(String.format(HtmlMaintenanceShips, modelMaintenance.getSize()));
 		}
