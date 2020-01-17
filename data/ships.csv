@@ -160,7 +160,7 @@ Federation,6,Verne Temporal Science Vessel (T6),Ultra Rare,Sci,29,29,68,Ignores 
 Federation,6,Klein Temporal Destroyer (T6),Ultra Rare,Tac,29,68,29,+8 TAC per EngShip or SciShip,1.21 Terrawatts
 Federation,6,NX Escort Refit (T6),Ultra Rare,Tac,42,63,21,+8 TAC per Any Ship,Preferential Targeting
 Federation,6,Concorde Command Battlecruiser (T6),Very Rare,Eng,77,20,20,+35 ENG when Alone,Improved Brace For Impact
-Federation,6,Daystrom Science Miracle Worker Cruiser (T6),Very Rare,Eng,57,26,34,'+20 TAC and ENG when Alone,Photonic Boarding Party
+Federation,6,Daystrom Science Miracle Worker Cruiser (T6),Very Rare,Eng,57,26,34,+20 TAC and ENG when Alone,Photonic Boarding Party
 Federation,6,Fleet Advanced Heavy Cruiser (T6),Very Rare,Eng,72,27,18,+8 TAC per Any Ship,
 Federation,6,Fleet Advanced Light Cruiser (T6),Very Rare,Eng,64,28,25,2x Critical Rating from Events,
 Federation,6,Fleet Battlecruiser (T6),Very Rare,Eng,43,55,19,+8 ENG per Any Ship,
@@ -313,7 +313,7 @@ Klingon,6,Qul'poH Temporal Science Vessel (T6),Ultra Rare,Sci,29,29,68,Ignores +
 Klingon,6,Chargh'poH Temporal Destroyer (T6),Ultra Rare,Tac,29,68,29,+8 TAC per EngShip or SciShip,1.21 Terrawatts
 Klingon,6,Sarcophagus Dreadnought Carrier [T6],Ultra Rare,Tac,41,53,32,Ignore +/- ENG from Events,Honored Dead
 Klingon,6,An'quat Command Battle Cruiser (T6),Very Rare,Eng,77,20,20,+35 ENG when Alone,Improved Brace For Impact
-Klingon,6,Antaak Science Miracle Worker Cruiser (T6),Very Rare,Eng,57,26,34,'+20 TAC and ENG when Alone,Photonic Boarding Party
+Klingon,6,Antaak Science Miracle Worker Cruiser (T6),Very Rare,Eng,57,26,34,+20 TAC and ENG when Alone,Photonic Boarding Party
 Klingon,6,Fleet Mogh Battlecruiser (T6),Very Rare,Eng,55,39,23,+8 ENG per Any Ship,
 Klingon,6,Fleet Negh'var Heavy Battle Cruiser (T6),Very Rare,Eng,55,35,27,+8 TAC per Any Ship,
 Klingon,6,Fleet Orion Blackguard Flight-Deck Assault Cruiser (T6),Very Rare,Eng,57,41,19,+8 ENG per TacShip or SciShip,
@@ -323,9 +323,9 @@ Klingon,6,Fleet Support Battlecruiser [T6],Very Rare,Eng,67,29,21,-10% Maintenan
 Klingon,6,Gorkon Science Battlecruiser (T6),Very Rare,Eng,54,36,27,+10 SCI per EngShip,Checkmate
 Klingon,6,Kahless War Battlecruiser (T6),Very Rare,Eng,64,34,19,+10 ENG per TacShip,Adaptive Hull Plating
 Klingon,6,Klinzhai Command Battle Cruiser (T6),Very Rare,Eng,73,20,24,+35 SCI when Alone,Improved Tachyon Beam
-Klingon,6,Klothos Tactical Miracle Worker Cruiser (T6),Very Rare,Eng,57,34,26,'+20 SCI and ENG when Alone,Redirecting Arrays
+Klingon,6,Klothos Tactical Miracle Worker Cruiser (T6),Very Rare,Eng,57,34,26,+20 SCI and ENG when Alone,Redirecting Arrays
 Klingon,6,Martok Tactical Battlecruiser (T6),Very Rare,Eng,48,46,23,+10 TAC per SciShip,Super Charged Weapons
-Klingon,6,Mur'Eq Operations Miracle Worker Cruiser (T6),Very Rare,Eng,65,26,26,'+20 TAC and SCI when Alone,Stay At Your Posts
+Klingon,6,Mur'Eq Operations Miracle Worker Cruiser (T6),Very Rare,Eng,65,26,26,+20 TAC and SCI when Alone,Stay At Your Posts
 Klingon,6,Ty'Gokor Command Battle Cruiser (T6),Very Rare,Eng,73,24,20,+35 TAC when Alone,All Hands On Deck
 Klingon,6,Ahgamas Multi-Mission Surveillance Vessel (T6),Very Rare,Sci,28,35,54,Ignores +/- SCI from Events,Charged Particle Reaction
 Klingon,6,Ihgomas Multi-Mission Strategic Vessel (T6),Very Rare,Sci,32,39,46,Ignores +/- ENG from Events,Exotic Particle Shielding
@@ -416,9 +416,9 @@ Romulan,6,Fleet Deleth Advanced Light Warbird Battlecruiser (T6),Very Rare,Eng,5
 Romulan,6,Fleet Ha'apax Advanced Warbird (T6),Very Rare,Eng,63,30,24,+8 TAC per Any Ship,
 Romulan,6,Fleet Kara Advanced Warbird (T6),Very Rare,Eng,63,30,24,+8 TAC per Any Ship,
 Romulan,6,Fleet Suliban Silik Flight-Deck Assault Cruiser (T6),Very Rare,Eng,57,41,19,+8 ENG per TacShip or SciShip,
-Romulan,6,Nijil Operations Miracle Worker Warbird (T6),Very Rare,Eng,65,26,26,'+20 TAC and SCI when Alone,Stay At Your Posts
-Romulan,6,Tebok Tactical Miracle Worker Warbird (T6),Very Rare,Eng,57,34,26,'+20 SCI and ENG when Alone,Redirecting Arrays
-Romulan,6,Varel Science Miracle Worker Warbird (T6),Very Rare,Eng,57,26,34,'+20 TAC and ENG when Alone,Photonic Boarding Party
+Romulan,6,Nijil Operations Miracle Worker Warbird (T6),Very Rare,Eng,65,26,26,+20 TAC and SCI when Alone,Stay At Your Posts
+Romulan,6,Tebok Tactical Miracle Worker Warbird (T6),Very Rare,Eng,57,34,26,+20 SCI and ENG when Alone,Redirecting Arrays
+Romulan,6,Varel Science Miracle Worker Warbird (T6),Very Rare,Eng,57,26,34,+20 TAC and ENG when Alone,Photonic Boarding Party
 Romulan,6,Vastam Command Battlecruiser Warbird (T6),Very Rare,Eng,73,24,20,+35 TAC when Alone,All Hands On Deck
 Romulan,6,Galas Surveillance Explorer Warbird (T6),Very Rare,Sci,28,35,54,Ignores +/- SCI from Events,Charged Particle Reaction
 Romulan,6,Surhuelh Reconnaissance Explorer Warbird (T6),Very Rare,Sci,21,44,52,Ignores +/- TAC from Events,Heavy Tachyon Mine
