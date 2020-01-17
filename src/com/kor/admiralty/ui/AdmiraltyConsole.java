@@ -398,11 +398,15 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		public void actionPerformed(ActionEvent e) {
 			int reply = JOptionPane.showConfirmDialog(null, "Check for updates?\nApplication will close after update.", null, JOptionPane.YES_NO_OPTION);
 			if (reply == 0) {
-				showDataUpdateInfo(Datastore.updateDataFiles());
+				List<Datastore.UpdateResult> updateResults = Datastore.updateDataFiles();
+				boolean updated = updateResults.stream().anyMatch(r -> r.getStatus() != Datastore.UpdateResult.Status.UNCHANGED);
+				showDataUpdateInfo(updateResults);
+				if (updated) {
+					Datastore.clearCachedIcons();
+					Datastore.setAdmirals(admirals);
+					dispose();
+				}
 			}
-			Datastore.clearCachedIcons();
-			Datastore.setAdmirals(admirals);
-			dispose();
 		}
 	}
 }
