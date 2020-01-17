@@ -58,7 +58,6 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 
 	protected Admirals admirals;
 	protected Map<Admiral, AdmiralPanel> admiralMap;
-	protected SortedMap<String, Ship> ships;
 
 	protected JPanel contentPane;
 	protected Action actionAddAdmiral;
@@ -75,11 +74,32 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		Swing.overrideComboBoxMouseWheel();
 	}
 
+	private void showDataUpdateInfo(List<Datastore.UpdateResult> updateResults) {
+		if (updateResults == null) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder("Data Update performed:");
+		for (Datastore.UpdateResult updateResult : updateResults) {
+			sb.append("\n").append(updateResult.getFileName()).append("... ");
+			switch (updateResult.getStatus()) {
+				case UNCHANGED:
+					sb.append("already up to date");
+					break;
+				case SUCCESS:
+					sb.append("updated");
+					break;
+				case FAILED:
+					sb.append("failed! - ").append(updateResult.getErrorMessage());
+					break;
+			}
+		}
+		JOptionPane.showMessageDialog(null, sb.toString());
+	}
+
 	/**
 	 * Create the frame.
 	 */
 	public AdmiraltyConsole() {
-		Datastore.updateDataFiles();
 		this.actionAddAdmiral = new AddAdmiralAction();
 		this.actionCenter = new CenterAction();
 		Swing.setLookAndFeel();
@@ -119,11 +139,11 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		JButton btnUsage = new JButton(actionUsage);
 		toolBar.add(btnUsage);
 
-		toolBar.add(Box.createHorizontalGlue());
-
 		Action actionUpdate = new DataUpdateAction();
 		JButton btnUpdate = new JButton(actionUpdate);
 		toolBar.add(btnUpdate);
+
+		toolBar.add(Box.createHorizontalGlue());
 
 		JLabel lblWindow = new JLabel(LabelWindowPosition);
 		toolBar.add(lblWindow);
@@ -150,6 +170,8 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		tabAdmirals = new JTabbedPane(JTabbedPane.LEFT);
 		contentPane.add(tabAdmirals, BorderLayout.CENTER);
 
+		processDataUpdate();
+
 		if (Beans.isDesignTime()) {
 			initDesignTime();
 		} else {
@@ -157,12 +179,25 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		}
 	}
 
+	private void processDataUpdate() {
+		List<Datastore.UpdateResult> updateResults = null;
+		if (Datastore.isDataFileMissing()) {
+			JOptionPane.showMessageDialog(null, "A datafile is missing. Update is required.");
+			updateResults = Datastore.updateDataFiles();
+		} else if (Datastore.shouldCheckForUpdatesUpdate()) {
+			int reply = JOptionPane.showConfirmDialog(null, "Check for updates?", null, JOptionPane.YES_NO_OPTION);
+			if (reply == 0) {
+				updateResults = Datastore.updateDataFiles();
+			}
+		}
+		showDataUpdateInfo(updateResults);
+	}
+
 	protected void initDesignTime() {
 	}
 
 	protected void initRunTime() {
 		actionCenter.actionPerformed(null);
-		ships = Datastore.getAllShips();
 		admirals = Datastore.getAdmirals();
 		admiralMap = new HashMap<Admiral, AdmiralPanel>();
 		for (Admiral admiral : admirals.getAdmirals()) {
@@ -193,14 +228,6 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 		});
 		timer.setInitialDelay(1);
 		timer.start();
-	}
-
-	public SortedMap<String, Ship> getShipDatabase() {
-		return ships;
-	}
-
-	public Admirals getAdmirals() {
-		return admirals;
 	}
 
 	@Override
@@ -364,12 +391,15 @@ public class AdmiraltyConsole extends JFrame implements Runnable, PropertyChange
 
 	private class DataUpdateAction extends AbstractAction {
 		public DataUpdateAction() {
-			super(LabelDataUpdate);
+			super(LabelDataUpdate, Images.ICON_IMPORT);
 			putValue(SHORT_DESCRIPTION, DescDataUpdate);
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Datastore.updateDataFiles(true);
+			int reply = JOptionPane.showConfirmDialog(null, "Check for updates?\nApplication will close after update.", null, JOptionPane.YES_NO_OPTION);
+			if (reply == 0) {
+				showDataUpdateInfo(Datastore.updateDataFiles());
+			}
 			Datastore.clearCachedIcons();
 			Datastore.setAdmirals(admirals);
 			dispose();

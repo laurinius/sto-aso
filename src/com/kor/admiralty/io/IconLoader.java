@@ -35,34 +35,24 @@ public class IconLoader {
 	
 	public static void loadCachedIcons(File file, SortedMap<String, ImageIcon> cache) {
 		if (!file.exists()) return;
-		try {
-			ZipFile zipFile = new ZipFile(file);
-			try {
+			try (ZipFile zipFile = new ZipFile(file)) {
 				for (Enumeration<? extends ZipEntry> e = zipFile.entries(); e.hasMoreElements();) {
 					ZipEntry entry = e.nextElement();
 					String name = entry.getName();
-					InputStream inStream = zipFile.getInputStream(entry);
-					BufferedImage image = ImageIO.read(inStream);
-					ImageIcon icon = new ImageIcon(image);
-					cache.put(name, icon);
+					try (InputStream inStream = zipFile.getInputStream(entry)) {
+						BufferedImage image = ImageIO.read(inStream);
+						ImageIcon icon = new ImageIcon(image);
+						cache.put(name, icon);
+					}
 				}
-			} finally {
-				try {
-					zipFile.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public static void saveCachedIcons(File file, SortedMap<String, ImageIcon> cache) {
-		try {
-			FileOutputStream outStream = new FileOutputStream(file);
-			ZipOutputStream zipStream = new ZipOutputStream(outStream);
-			
+		try (FileOutputStream outStream = new FileOutputStream(file);
+			 ZipOutputStream zipStream = new ZipOutputStream(outStream)) {
 			for (Map.Entry<String, ImageIcon> entry : cache.entrySet()) {
 				try {
 					String name = entry.getKey();
@@ -78,9 +68,6 @@ public class IconLoader {
 					zipStream.closeEntry();
 				}
 			}
-			
-			zipStream.flush();
-			zipStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 

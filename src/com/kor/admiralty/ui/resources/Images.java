@@ -34,8 +34,7 @@ public class Images {
 	protected static final int SPAN_ICON = 24;
 	protected static final BufferedImage IMG_BLANK = new BufferedImage(SPAN_IMAGE, SPAN_IMAGE, BufferedImage.TYPE_INT_ARGB);
 	protected static final TreeMap<String, Image> CACHE = new TreeMap<String, Image>();
-	protected static final ShipIconFactory SHIP_ICON_FACTORY = new ActualShipIconFactory();
-	protected static final ShipIconFactory SHIP_GENERIC_ICON_FACTORY = new GenericShipIconFactory();
+	protected static ShipIconFactory SHIP_ICON_FACTORY;
 	
 	public static final Image IMG_ASO = TOOLKIT.createImage(Images.class.getResource("aso.png"));
 	
@@ -76,9 +75,16 @@ public class Images {
 	//public static ImageIcon getIcon(String iconName, ShipFaction faction, Role role, Rarity rarity) {
 	//	return getIcon(iconName, faction, role, rarity, false);
 	//}
+
+	private static ShipIconFactory getShipIconFactory() {
+		if (SHIP_ICON_FACTORY == null) {
+			SHIP_ICON_FACTORY = new ActualShipIconFactory();
+		}
+		return SHIP_ICON_FACTORY;
+	}
 	
 	public static ImageIcon getIcon(String iconName, ShipFaction faction, Role role, Rarity rarity, boolean owned) {
-		return SHIP_ICON_FACTORY.getIcon(iconName, faction, role, rarity, owned);
+		return getShipIconFactory().getIcon(iconName, faction, role, rarity, owned);
 	}
 	
 }

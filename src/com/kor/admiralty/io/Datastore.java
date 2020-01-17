@@ -25,10 +25,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
@@ -219,8 +216,7 @@ public class Datastore {
 	private static void loadIcons() {
 		File file = file(FILENAME_ICONS);
 		ICONS.clear();
-		try {
-			ZipFile zipFile = new ZipFile(file);
+		try (ZipFile zipFile = new ZipFile(file)) {
 			Enumeration<? extends ZipEntry> entries = zipFile.entries();
 			while (entries.hasMoreElements()) {
 				ZipEntry entry = entries.nextElement();
@@ -283,18 +279,76 @@ public class Datastore {
 		return ADMIRALS;
 	}
 
-	public static void updateDataFiles() {
-		updateDataFiles(false);
+	public static boolean isDataFileMissing() {
+		for (String filename : DATA_FILES) {
+			File file = Datastore.file(filename);
+			if (!file.exists()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public static void updateDataFiles(boolean force) {
-		if (force || (Configuration.isDataUpdateEnabled() && isDataFilesStale())) {
-			for(String filename : DATA_FILES) {
-				File file = Datastore.file(filename);
-				String url = url(filename);
+	public static boolean shouldCheckForUpdatesUpdate() {
+		return (Configuration.isDataUpdateEnabled() && isDataFilesStale());
+	}
+
+	public static List<UpdateResult> updateDataFiles() {
+		List<UpdateResult> results = new ArrayList<>();
+		for(String filename : DATA_FILES) {
+			File file = Datastore.file(filename);
+			String url = url(filename);
+			try {
 				downloadFile(file, url);
+				results.add(UpdateResult.success(filename));
+			} catch (DownloadException e) {
+				logger.log(Level.WARNING, e.getMessage(), e);
+				results.add(UpdateResult.failed(filename, e.getMessage()));
 			}
-			Configuration.setDataUpdateLastUpdated(System.currentTimeMillis());
+		}
+		Configuration.setDataUpdateLastUpdated(System.currentTimeMillis());
+		return results;
+	}
+
+	public static class UpdateResult {
+		public enum Status {
+			UNCHANGED,
+			SUCCESS,
+			FAILED
+		}
+
+		private String fileName;
+		private Status status;
+		private String errorMessage;
+
+		private static UpdateResult unchanged(String fileName) {
+			return new UpdateResult(fileName, Status.UNCHANGED, null);
+		}
+
+		private static UpdateResult success(String fileName) {
+			return new UpdateResult(fileName, Status.SUCCESS, null);
+		}
+
+		private static UpdateResult failed(String fileName, String errorMessage) {
+			return new UpdateResult(fileName, Status.FAILED, errorMessage);
+		}
+
+		private UpdateResult(String fileName, Status status, String errorMessage) {
+			this.fileName = fileName;
+			this.status = status;
+			this.errorMessage = errorMessage;
+		}
+
+		public String getFileName() {
+			return fileName;
+		}
+
+		public Status getStatus() {
+			return status;
+		}
+
+		public String getErrorMessage() {
+			return errorMessage;
 		}
 	}
 
@@ -302,20 +356,26 @@ public class Datastore {
 		return String.format(Configuration.getDataUpdateUrl(), filename);
 	}
 
-	private static void downloadFile(File file, String remoteName) {
+	private static void downloadFile(File file, String remoteName) throws DownloadException {
 		File tempFile = new File(file.toString() + ".temp");
+		tempFile.delete();
+		URL url;
 		try {
-			URL url = new URL(remoteName);
-			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-			FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
-			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-			fileOutputStream.close();
-			file.delete();
-			tempFile.renameTo(file);
+			url = new URL(remoteName);
 		} catch (MalformedURLException cause) {
-			logger.log(Level.WARNING, "Malformed URL: " + remoteName, cause);
+			throw new DownloadException("Malformed URL: " + remoteName, cause);
+		}
+		try (InputStream is = url.openStream();
+				ReadableByteChannel readableByteChannel = Channels.newChannel(is);
+				FileOutputStream fileOutputStream = new FileOutputStream(tempFile)) {
+			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 		} catch (IOException cause) {
-			logger.log(Level.WARNING, "Error while downloading " + remoteName, cause);
+			throw new DownloadException("Error while downloading " + remoteName, cause);
+		}
+		file.delete();
+		boolean renamed = tempFile.renameTo(file);
+		if (!renamed) {
+			throw new DownloadException("Failed to replace data file " + file.getName());
 		}
 	}
 	
