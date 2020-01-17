@@ -25,6 +25,9 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +48,7 @@ import com.kor.admiralty.beans.Admiral;
 import com.kor.admiralty.beans.Admirals;
 import com.kor.admiralty.beans.Event;
 import com.kor.admiralty.beans.Ship;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import static com.kor.admiralty.Globals.*;
 import static com.kor.admiralty.ui.resources.Strings.ExceptionDialog.*;
@@ -293,16 +297,43 @@ public class Datastore {
 		return (Configuration.isDataUpdateEnabled() && isDataFilesStale());
 	}
 
+	private static String getLocalMd5(String filename) {
+		File file = file(filename);
+		if (!file.exists()) {
+			return "";
+		}
+		try (InputStream is = new FileInputStream(file(filename))) {
+			return DigestUtils.md5Hex(is);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static boolean isUpdateAvailable(String filename) throws DownloadException {
+		String md5Name = filename + FILENAME_MD5_EXT;
+		String onlineMd5 = downloadMd5(url(md5Name));
+		String localMd5 = getLocalMd5(filename);
+		return (!localMd5.equals(onlineMd5));
+	}
+
 	public static List<UpdateResult> updateDataFiles() {
 		List<UpdateResult> results = new ArrayList<>();
 		for(String filename : DATA_FILES) {
-			File file = Datastore.file(filename);
-			String url = url(filename);
 			try {
-				downloadFile(file, url);
-				results.add(UpdateResult.success(filename));
+				if (isUpdateAvailable(filename)) {
+					File file = Datastore.file(filename);
+					String url = url(filename);
+					try {
+						downloadFile(file, url);
+						results.add(UpdateResult.success(filename));
+					} catch (DownloadException e) {
+						logger.log(Level.WARNING, e.getMessage(), e);
+						results.add(UpdateResult.failed(filename, e.getMessage()));
+					}
+				} else {
+					results.add(UpdateResult.unchanged(filename));
+				}
 			} catch (DownloadException e) {
-				logger.log(Level.WARNING, e.getMessage(), e);
 				results.add(UpdateResult.failed(filename, e.getMessage()));
 			}
 		}
@@ -354,6 +385,22 @@ public class Datastore {
 
 	private static String url(String filename) {
 		return String.format(Configuration.getDataUpdateUrl(), filename);
+	}
+
+	private static String downloadMd5(String remoteName) throws DownloadException {
+		URL url;
+		try {
+			url = new URL(remoteName);
+		} catch (MalformedURLException cause) {
+			throw new DownloadException("Malformed URL: " + remoteName, cause);
+		}
+		try (InputStream is = url.openStream();
+			 InputStreamReader isReader = new InputStreamReader(is);
+			 BufferedReader reader = new BufferedReader(isReader)) {
+			return reader.readLine();
+		} catch (IOException cause) {
+			throw new DownloadException("Error while downloading " + remoteName, cause);
+		}
 	}
 
 	private static void downloadFile(File file, String remoteName) throws DownloadException {

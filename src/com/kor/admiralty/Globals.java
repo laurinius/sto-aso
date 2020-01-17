@@ -43,6 +43,7 @@ public class Globals {
 	public static final String DIRECTORY_ICONS_USER = "icons";
 	public static final String FILENAME_ICONCACHE = "iconcache.zip";
 	public static final String FILENAME_NEWCACHE = "newiconcache.zip";
+	public static final String FILENAME_MD5_EXT = ".md5";
 	public static final String DATA_FILES[] = { FILENAME_SHIPCACHE, FILENAME_EVENTS, FILENAME_ASSIGNMENTS,
 												FILENAME_RENAMED, FILENAME_TRAITS, FILENAME_ICONS};
 	public static boolean DEBUG;
