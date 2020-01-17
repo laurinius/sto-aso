@@ -164,10 +164,12 @@ public class Datastore {
 		} catch (IOException cause) {
 			logger.log(Level.WARNING, String.format(ErrorReading, file.getName()), cause);
 		}
-		try (Reader reader = loadFile(userShips)) {
-			ShipDatabaseParser.loadShipDatabase(reader, SHIPS);
-		} catch (IOException cause) {
-			logger.log(Level.WARNING, String.format(ErrorReading, userShips.getName()), cause);
+		if (userShips.exists()) {
+			try (Reader reader = loadFile(userShips)) {
+				ShipDatabaseParser.loadShipDatabase(reader, SHIPS);
+			} catch (IOException cause) {
+				logger.log(Level.WARNING, String.format(ErrorReading, userShips.getName()), cause);
+			}
 		}
 	}
 	
