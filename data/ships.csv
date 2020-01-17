@@ -556,3 +556,5 @@ Universal,6,Cardassian Intel Science Dreadnought [T6],Very Rare,Sci,23,34,60,Ign
 Universal,6,Temporal Multi-Mission Science Vessel [T6],Very Rare,Sci,32,29,56,Ignores +/- SCI from Events,Particle Feedback Loop
 Universal,6,Cardassian Intel Escort [T6],Very Rare,Tac,16,56,45,Ignore +/- TAC from Events,Preparedness
 Universal,6,Temporal Raider [T6],Very Rare,Tac,32,55,30,Ignores +/- TAC from Events,Regroup
+Universal,6,Fek'Ihri Fe'rang Dreadnought Carrier (T6),Ultra Rare,Tac,40,62,24,+10 TAC per ENGShip,
+Federation,6,Gagarin Miracle Worker Battlecruiser (T6),Rare,Eng,50,43,15,+8 TAC and ENG per ENGship,
