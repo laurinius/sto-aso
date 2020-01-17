@@ -230,10 +230,13 @@ public class Datastore {
 					ICONS.put(entry.getName(), ImageIO.read(is));
 				}
 			}
-			Files.walk(Paths.get(DIRECTORY_ICONS_USER))
-					.filter(p -> p.toString().toLowerCase().endsWith(".png"))
-					.map(Path::toFile)
-					.forEach(Datastore::addIcon);
+			Path userIcons = Paths.get(DIRECTORY_ICONS_USER);
+			if (Files.exists(userIcons) && Files.isDirectory(userIcons)) {
+				Files.walk(userIcons)
+						.filter(p -> p.toString().toLowerCase().endsWith(".png"))
+						.map(Path::toFile)
+						.forEach(Datastore::addIcon);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
