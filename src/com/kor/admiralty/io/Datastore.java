@@ -409,6 +409,9 @@ public class Datastore {
 	}
 
 	private static void downloadFile(File file, String remoteName) throws DownloadException {
+		if (!file.getParentFile().exists()) {
+			file.getParentFile().mkdirs();
+		}
 		File tempFile = new File(file.toString() + ".temp");
 		tempFile.delete();
 		URL url;
